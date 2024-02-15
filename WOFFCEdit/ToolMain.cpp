@@ -14,11 +14,13 @@ ToolMain::ToolMain()
 	m_databaseConnection = NULL;
 
 	//zero input commands
-	m_toolInputCommands.forward		= false;
-	m_toolInputCommands.back		= false;
-	m_toolInputCommands.left		= false;
-	m_toolInputCommands.right		= false;
-	
+	m_toolInputCommands.forward = false;
+	m_toolInputCommands.back = false;
+	m_toolInputCommands.left = false;
+	m_toolInputCommands.right = false;
+
+	mousePos = LPPOINT();
+
 }
 
 
@@ -37,21 +39,21 @@ int ToolMain::getCurrentSelectionID()
 void ToolMain::onActionInitialise(HWND handle, int width, int height)
 {
 	//window size, handle etc for directX
-	m_width		= width;
-	m_height	= height;
-	
+	m_width = width;
+	m_height = height;
+
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
 
 	//database connection establish
 	int rc;
-	rc = sqlite3_open_v2("database/test.db",&m_databaseConnection, SQLITE_OPEN_READWRITE, NULL);
+	rc = sqlite3_open_v2("database/test.db", &m_databaseConnection, SQLITE_OPEN_READWRITE, NULL);
 
-	if (rc) 
+	if (rc)
 	{
 		TRACE("Can't open database");
 		//if the database cant open. Perhaps a more catastrophic error would be better here
 	}
-	else 
+	else
 	{
 		TRACE("Opened database successfully");
 	}
@@ -69,24 +71,24 @@ void ToolMain::onActionLoad()
 
 	//SQL
 	int rc;
-	char *sqlCommand;
-	char *ErrMSG = 0;
-	sqlite3_stmt *pResults;								//results of the query
-	sqlite3_stmt *pResultsChunk;
+	char* sqlCommand;
+	char* ErrMSG = 0;
+	sqlite3_stmt* pResults;								//results of the query
+	sqlite3_stmt* pResultsChunk;
 
 	//OBJECTS IN THE WORLD
 	//prepare SQL Text
 	sqlCommand = "SELECT * from Objects";				//sql command which will return all records from the objects table.
 	//Send Command and fill result object
-	rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand, -1, &pResults, 0 );
-	
+	rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand, -1, &pResults, 0);
+
 	//loop for each row in results until there are no more rows.  ie for every row in the results. We create and object
 	while (sqlite3_step(pResults) == SQLITE_ROW)
-	{	
+	{
 		SceneObject newSceneObject;
 		newSceneObject.ID = sqlite3_column_int(pResults, 0);
 		newSceneObject.chunk_ID = sqlite3_column_int(pResults, 1);
-		newSceneObject.model_path		= reinterpret_cast<const char*>(sqlite3_column_text(pResults, 2));
+		newSceneObject.model_path = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 2));
 		newSceneObject.tex_diffuse_path = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 3));
 		newSceneObject.posX = sqlite3_column_double(pResults, 4);
 		newSceneObject.posY = sqlite3_column_double(pResults, 5);
@@ -141,7 +143,7 @@ void ToolMain::onActionLoad()
 		newSceneObject.light_constant = sqlite3_column_double(pResults, 53);
 		newSceneObject.light_linear = sqlite3_column_double(pResults, 54);
 		newSceneObject.light_quadratic = sqlite3_column_double(pResults, 55);
-	
+
 
 		//send completed object to scenegraph
 		m_sceneGraph.push_back(newSceneObject);
@@ -150,7 +152,7 @@ void ToolMain::onActionLoad()
 	//THE WORLD CHUNK
 	//prepare SQL Text
 	sqlCommand = "SELECT * from Chunks";				//sql command which will return all records from  chunks table. There is only one tho.
-														//Send Command and fill result object
+	//Send Command and fill result object
 	rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand, -1, &pResultsChunk, 0);
 
 
@@ -187,10 +189,10 @@ void ToolMain::onActionSave()
 {
 	//SQL
 	int rc;
-	char *sqlCommand;
-	char *ErrMSG = 0;
-	sqlite3_stmt *pResults;								//results of the query
-	
+	char* sqlCommand;
+	char* ErrMSG = 0;
+	sqlite3_stmt* pResults;								//results of the query
+
 
 	//OBJECTS IN THE WORLD Delete them all
 	//prepare SQL Text
@@ -205,10 +207,10 @@ void ToolMain::onActionSave()
 	for (int i = 0; i < numObjects; i++)
 	{
 		std::stringstream command;
-		command << "INSERT INTO Objects " 
-			<<"VALUES(" << m_sceneGraph.at(i).ID << ","
-			<< m_sceneGraph.at(i).chunk_ID  << ","
-			<< "'" << m_sceneGraph.at(i).model_path <<"'" << ","
+		command << "INSERT INTO Objects "
+			<< "VALUES(" << m_sceneGraph.at(i).ID << ","
+			<< m_sceneGraph.at(i).chunk_ID << ","
+			<< "'" << m_sceneGraph.at(i).model_path << "'" << ","
 			<< "'" << m_sceneGraph.at(i).tex_diffuse_path << "'" << ","
 			<< m_sceneGraph.at(i).posX << ","
 			<< m_sceneGraph.at(i).posY << ","
@@ -267,7 +269,7 @@ void ToolMain::onActionSave()
 			<< ")";
 		std::string sqlCommand2 = command.str();
 		rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand2.c_str(), -1, &pResults, 0);
-		sqlite3_step(pResults);	
+		sqlite3_step(pResults);
 	}
 	MessageBox(NULL, L"Objects Saved", L"Notification", MB_OK);
 }
@@ -277,7 +279,7 @@ void ToolMain::onActionSaveTerrain()
 	m_d3dRenderer.SaveDisplayChunk(&m_chunk);
 }
 
-void ToolMain::Tick(MSG *msg)
+void ToolMain::Tick(MSG* msg)
 {
 	//do we have a selection
 	//do we have a mode
@@ -291,7 +293,7 @@ void ToolMain::Tick(MSG *msg)
 	m_d3dRenderer.Tick(&m_toolInputCommands);
 }
 
-void ToolMain::UpdateInput(MSG * msg)
+void ToolMain::UpdateInput(MSG* msg)
 {
 
 	switch (msg->message)
@@ -306,10 +308,16 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 
 	case WM_MOUSEMOVE:
+		m_toolInputCommands.mouseX = GET_X_LPARAM(msg->lParam);
+		m_toolInputCommands.mouseY = GET_Y_LPARAM(msg->lParam);
 		break;
 
 	case WM_LBUTTONDOWN:	//mouse button down,  you will probably need to check when its up too
 		//set some flag for the mouse button in inputcommands
+		m_toolInputCommands.LMB = true;
+		break;
+	case WM_LBUTTONUP:
+		m_toolInputCommands.LMB = false;
 		break;
 
 	}
@@ -320,7 +328,7 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.forward = true;
 	}
 	else m_toolInputCommands.forward = false;
-	
+
 	if (m_keyArray['S'])
 	{
 		m_toolInputCommands.back = true;
@@ -348,6 +356,28 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.rotLeft = true;
 	}
 	else m_toolInputCommands.rotLeft = false;
+	if (m_keyArray['I'])
+	{
+		m_toolInputCommands.rotUp = true;
+	}
+	else m_toolInputCommands.rotUp = false;
+	if (m_keyArray['K'])
+	{
+		m_toolInputCommands.rotDown = true;
+	}
+	else m_toolInputCommands.rotDown = false;
+
+	if (m_keyArray['O'])
+	{
+		m_toolInputCommands.rotRollR = true;
+	}
+	else m_toolInputCommands.rotRollR = false;
+
+	if (m_keyArray['U'])
+	{
+		m_toolInputCommands.rotRollL = true;
+	}
+	else m_toolInputCommands.rotRollL = false;
 
 	//WASD
 }
