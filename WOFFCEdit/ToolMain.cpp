@@ -312,12 +312,12 @@ void ToolMain::UpdateInput(MSG* msg)
 		m_toolInputCommands.mouseY = GET_Y_LPARAM(msg->lParam);
 		break;
 
-	case WM_LBUTTONDOWN:	//mouse button down,  you will probably need to check when its up too
+	case WM_RBUTTONDOWN:	//mouse button down,  you will probably need to check when its up too
 		//set some flag for the mouse button in inputcommands
-		m_toolInputCommands.LMB = true;
+		m_toolInputCommands.RMB = true;
 		break;
-	case WM_LBUTTONUP:
-		m_toolInputCommands.LMB = false;
+	case WM_RBUTTONUP:
+		m_toolInputCommands.RMB = false;
 		break;
 
 	}
@@ -367,17 +367,6 @@ void ToolMain::UpdateInput(MSG* msg)
 	}
 	else m_toolInputCommands.rotDown = false;
 
-	if (m_keyArray['O'])
-	{
-		m_toolInputCommands.rotRollR = true;
-	}
-	else m_toolInputCommands.rotRollR = false;
-
-	if (m_keyArray['U'])
-	{
-		m_toolInputCommands.rotRollL = true;
-	}
-	else m_toolInputCommands.rotRollL = false;
 
 	//WASD
 }

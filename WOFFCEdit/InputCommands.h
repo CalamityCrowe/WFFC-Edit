@@ -10,12 +10,11 @@ struct InputCommands
 	bool rotLeft;
 	bool rotUp;
 	bool rotDown;
-	bool rotRollR;
-	bool rotRollL;
+
 
 	float mouseX;
 	float mouseY;
 
-	bool LMB; 
+	bool RMB; 
 
 };

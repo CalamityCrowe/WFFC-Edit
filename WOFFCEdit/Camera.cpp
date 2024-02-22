@@ -41,29 +41,22 @@ void Camera::Update(InputCommands* commands)
 
 	if (commands->rotRight)
 	{
-		m_camOrientation.y -= m_camRotRate;
+		m_camOrientation.y += m_camRotRate;
 	}
 	if (commands->rotLeft)
 	{
-		m_camOrientation.y += m_camRotRate;
+		m_camOrientation.y -= m_camRotRate;
 	}
 	if (commands->rotUp)
 	{
-		m_camOrientation.x -= m_camRotRate;
+		m_camOrientation.x += m_camRotRate;
 	}
 	if (commands->rotDown)
 	{
-		m_camOrientation.x += m_camRotRate;
+		m_camOrientation.x -= m_camRotRate;
 	}
 
-	if (commands->rotRollL)
-	{
-		m_camOrientation.z -= m_camRotRate;
-	}
-	if (commands->rotRollR)
-	{
-		m_camOrientation.z += m_camRotRate;
-	}
+
 
 	float cosR, cosP, cosY;
 	float sinR, sinP, sinY;
