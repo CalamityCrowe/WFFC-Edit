@@ -57,28 +57,35 @@ void Camera::Update(InputCommands* commands)
 	}
 
 
+	if (commands->RMB == false)
+	{
 
-	float cosR, cosP, cosY;
-	float sinR, sinP, sinY;
+		float cosR, cosP, cosY;
+		float sinR, sinP, sinY;
 
-	cosP = cosf(m_camOrientation.x * (3.1415 / 180));
-	cosY = cosf(m_camOrientation.y * (3.1415 / 180));
-	cosR = cosf(m_camOrientation.z * (3.1415 / 180));
+		cosP = cosf(m_camOrientation.x * (3.1415 / 180));
+		cosY = cosf(m_camOrientation.y * (3.1415 / 180));
+		cosR = cosf(m_camOrientation.z * (3.1415 / 180));
 
-	sinP = sinf(m_camOrientation.x * (3.1415 / 180));
-	sinY = sinf(m_camOrientation.y * (3.1415 / 180));
-	sinR = sinf(m_camOrientation.z * (3.1415 / 180));
+		sinP = sinf(m_camOrientation.x * (3.1415 / 180));
+		sinY = sinf(m_camOrientation.y * (3.1415 / 180));
+		sinR = sinf(m_camOrientation.z * (3.1415 / 180));
 
-	m_camLookDirection.x = sinY * cosP;
-	m_camLookDirection.y = sinP;
-	m_camLookDirection.z = cosP * -cosY;
+		m_camLookDirection.x = sinY * cosP;
+		m_camLookDirection.y = sinP;
+		m_camLookDirection.z = cosP * -cosY;
 
-	m_camLookDirection.Normalize();
+		m_camLookDirection.Normalize();
 
-	//create right vector from look Direction
-	m_camLookDirection.Cross(DirectX::SimpleMath::Vector3::UnitY, m_camRight);
+		//create right vector from look Direction
+		m_camLookDirection.Cross(DirectX::SimpleMath::Vector3::UnitY, m_camRight);
 
-	//process input and update stuff
+		//process input and update stuff
+
+
+		//update lookat point
+
+	}
 	if (commands->forward)
 	{
 		m_camPos += m_camLookDirection * m_movespeed;
@@ -95,12 +102,9 @@ void Camera::Update(InputCommands* commands)
 	{
 		m_camPos -= m_camRight * m_movespeed;
 	}
-
-	//update lookat point
 	m_camLookAt = m_camPos + m_camLookDirection;
-
 	//apply camera vectors
-	
+
 
 }
 
@@ -118,33 +122,60 @@ void Camera::HandleMouse(InputCommands* Input)
 			Difference.x = newMouse.x - oldMouse.x;
 			Difference.y = newMouse.y - oldMouse.y;
 
-			Difference.Normalize(); 
-
-			if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
+			if (Input->arcBall == false)
 			{
-				m_camOrientation.y += m_camRotRate * Difference.x; // yaw
-				m_camOrientation.x -= m_camRotRate * Difference.y; // pitch
+				Difference.Normalize();
+
+				if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
+				{
+					m_camOrientation.y += m_camRotRate * Difference.x; // yaw
+					m_camOrientation.x -= m_camRotRate * Difference.y; // pitch
+				}
+
+				float cosR, cosP, cosY;
+				float sinR, sinP, sinY;
+
+				cosP = cosf(m_camOrientation.x * (3.1415 / 180));
+				cosY = cosf(m_camOrientation.y * (3.1415 / 180));
+				cosR = cosf(m_camOrientation.z * (3.1415 / 180));
+
+				sinP = sinf(m_camOrientation.x * (3.1415 / 180));
+				sinY = sinf(m_camOrientation.y * (3.1415 / 180));
+				sinR = sinf(m_camOrientation.z * (3.1415 / 180));
+
+				m_camLookDirection.x = sinY * cosP;
+				m_camLookDirection.y = sinP;
+				m_camLookDirection.z = cosP * -cosY;
+
+				m_camLookAt = m_camPos + m_camLookDirection;
+
 			}
+			else
+			{
+				//arcball rotation
+				// This needs implemented and needs to know about the selected object
+				Difference.Normalize();
+				if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
+				{
+					// this is where the camera placement is updated
+				}
 
-			float cosR, cosP, cosY;
-			float sinR, sinP, sinY;
+				m_camLookDirection = ArcTarget - m_camPos;
 
-			cosP = cosf(m_camOrientation.x * (3.1415 / 180));
-			cosY = cosf(m_camOrientation.y * (3.1415 / 180));
-			cosR = cosf(m_camOrientation.z * (3.1415 / 180));
+				m_camLookDirection.Normalize();
 
-			sinP = sinf(m_camOrientation.x * (3.1415 / 180));
-			sinY = sinf(m_camOrientation.y * (3.1415 / 180));
-			sinR = sinf(m_camOrientation.z * (3.1415 / 180));
+				m_camLookAt = m_camPos + m_camLookDirection;
+				DirectX::SimpleMath::Vector3 up;
+				up.Cross(m_camRight, m_camLookAt);
+				DirectX::SimpleMath::Vector3 correctedRight;
+				correctedRight.Cross(m_camLookAt, up);
 
-			m_camLookDirection.x = sinY * cosP;
-			m_camLookDirection.y = sinP;
-			m_camLookDirection.z = cosP * -cosY;
 
-			m_camLookAt = m_camPos + m_camLookDirection;
+				m_camOrientation.x = asinf(m_camLookAt.y);
+				m_camOrientation.y = atan2f(m_camLookAt.x, m_camLookAt.z);
+				m_camOrientation.z = atan2f(m_camLookDirection.y, up.y);
 
-			m_view = DirectX::SimpleMath::Matrix::CreateLookAt(m_camPos, m_camLookAt, DirectX::SimpleMath::Vector3::UnitY);
-
+			}
 		}
 
 

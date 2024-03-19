@@ -11,6 +11,8 @@ struct InputCommands
 	bool rotUp;
 	bool rotDown;
 
+	bool focus;
+	bool arcBall; // false will be free rotation, true will be the arcing rotation
 
 	float mouseX;
 	float mouseY;

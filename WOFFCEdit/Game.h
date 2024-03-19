@@ -56,6 +56,8 @@ public:
 
 	static float CalculateDistanceBetween(DirectX::XMFLOAT3 point1, DirectX::SimpleMath::Vector3 point2);
 
+	bool CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2);
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif

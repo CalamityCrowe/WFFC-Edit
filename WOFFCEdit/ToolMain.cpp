@@ -393,4 +393,11 @@ void ToolMain::UpdateInput(MSG* msg)
 	{
 		m_toolInputCommands.CameraSelected = 3;
 	}
+
+	if (m_keyArray['R'])
+	{
+		m_toolInputCommands.arcBall = true;
+	}
+	else m_toolInputCommands.arcBall = false;
+
 }

@@ -142,6 +142,8 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
+
+
 	m_batchEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
 	m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
@@ -202,7 +204,7 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
-	std::wstring var = L"Cam X: " + std::to_wstring(m_mouse->GetState().x) + L"Cam Z: " + std::to_wstring(m_mouse->GetState().y);
+	std::wstring var = L"Cam X: " + std::to_wstring(m_Cameras[m_CurrentCamera]->GetRight().x) + L"Cam Z: " + std::to_wstring(m_Cameras[m_CurrentCamera]->GetRight().z);
 	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(100, 10), Colors::Yellow);
 	m_sprites->End();
 
@@ -504,6 +506,14 @@ int Game::MousePicking()
 
 
 					}
+					for (int cam = 0; cam < m_Cameras.size(); ++cam)
+					{
+
+						if (!CompareXMFloat3(m_Cameras[cam]->GetArcTarget(), m_displayList[selectedID].m_model.get()->meshes[y]->boundingBox.Center)) // returns false if they are not the same
+						{
+							m_Cameras[cam]->SetArcTarget(m_displayList[selectedID].m_model.get()->meshes[y]->boundingBox.Center);
+						}
+					}
 				}
 			}
 		}
@@ -523,6 +533,12 @@ float Game::CalculateDistanceBetween(DirectX::XMFLOAT3 point1, DirectX::SimpleMa
 
 	return distance;
 }
+
+bool Game::CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2)
+{
+	return (point1.x == point2.x && point1.y == point2.y && point1.z == point2.z);
+}
+
 
 #ifdef DXTK_AUDIO
 void Game::NewAudioDevice()

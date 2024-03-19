@@ -5,16 +5,16 @@ D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\InputCommands.h(3,8): warning C4099:
   see declaration of 'InputCommands'
   
 D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(10,16): warning C4305: '=': truncation from 'double' to 'float'
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(64,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(65,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(66,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(68,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(69,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(70,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(132,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(133,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(134,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(136,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(137,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(138,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(66,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(67,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(68,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(70,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(71,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(72,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(138,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(139,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(140,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(142,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(143,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(144,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Win32SimpleSample.vcxproj -> D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Debug\WoFEdit.exe
