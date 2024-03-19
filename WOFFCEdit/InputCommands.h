@@ -15,6 +15,8 @@ struct InputCommands
 	float mouseX;
 	float mouseY;
 
-	bool RMB; 
-	bool LMB; 
+	bool RMB;
+	bool LMB;
+
+	int CameraSelected = 0;
 };

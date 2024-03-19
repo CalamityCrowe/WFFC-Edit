@@ -290,10 +290,10 @@ void ToolMain::Tick(MSG* msg)
 		//resend scenegraph to Direct X renderer
 
 	//Renderer Update Call
-	if(m_toolInputCommands.LMB)
+	if (m_toolInputCommands.LMB)
 	{
-		m_selectedObject = m_d3dRenderer.MousePicking(); 
-		m_toolInputCommands.LMB = false; 
+		m_selectedObject = m_d3dRenderer.MousePicking();
+		m_toolInputCommands.LMB = false;
 	}
 
 	m_d3dRenderer.Tick(&m_toolInputCommands);
@@ -326,10 +326,10 @@ void ToolMain::UpdateInput(MSG* msg)
 		m_toolInputCommands.RMB = false;
 		break;
 	case WM_LBUTTONDOWN:
-		m_toolInputCommands.LMB = true; 
+		m_toolInputCommands.LMB = true;
 		break;
 	case WM_LBUTTONUP:
-		m_toolInputCommands.LMB = false; 
+		m_toolInputCommands.LMB = false;
 		break;
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
@@ -377,7 +377,20 @@ void ToolMain::UpdateInput(MSG* msg)
 		m_toolInputCommands.rotDown = true;
 	}
 	else m_toolInputCommands.rotDown = false;
-
-
-	//WASD
+	if (m_keyArray['0'])
+	{
+		m_toolInputCommands.CameraSelected = 0;
+	}
+	if (m_keyArray['1'])
+	{
+		m_toolInputCommands.CameraSelected = 1;
+	}
+	if (m_keyArray['2'])
+	{
+		m_toolInputCommands.CameraSelected = 2;
+	}
+	if (m_keyArray['3'])
+	{
+		m_toolInputCommands.CameraSelected = 3;
+	}
 }
