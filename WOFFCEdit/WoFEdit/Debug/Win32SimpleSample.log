@@ -1,21 +1,20 @@
-﻿  Game.cpp
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.h(7,7): warning C4099: 'InputCommands': type name first seen using 'struct' now seen using 'class'
-  (compiling source file 'Game.cpp')
+﻿  Camera.cpp
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\InputCommands.h(3,8): warning C4099: 'InputCommands': type name first seen using 'class' now seen using 'struct'
+  (compiling source file 'Camera.cpp')
   D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\InputCommands.h(3,8):
   see declaration of 'InputCommands'
   
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(207,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(206,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(205,98): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(191,10): warning C4101: 'Buffer': unreferenced local variable
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(444,20): warning C4018: '<': signed/unsigned mismatch
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(453,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(452,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(451,98): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(459,111): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(459,85): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(460,109): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(460,83): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(467,21): warning C4018: '<': signed/unsigned mismatch
-D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Game.cpp(500,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(10,16): warning C4305: '=': truncation from 'double' to 'float'
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(64,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(65,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(66,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(68,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(69,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(70,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(132,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(133,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(134,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(136,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(137,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Camera.cpp(138,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Win32SimpleSample.vcxproj -> D:\LocalWorkDir\2003209\WFFC-Edit\WOFFCEdit\Debug\WoFEdit.exe

@@ -92,8 +92,9 @@ private:
 	std::unique_ptr<DirectX::Mouse>         m_mouse;
 
 	//Camera
-	std::unique_ptr<Camera> CurrentCamera;
+	//std::unique_ptr<Camera> CurrentCamera;
 
+	std::vector<std::unique_ptr<Camera>> m_Cameras;
 
 	// DirectXTK objects.
 	std::unique_ptr<DirectX::CommonStates>                                  m_states;
@@ -127,7 +128,7 @@ private:
 	DirectX::SimpleMath::Matrix                                             m_world;
 	DirectX::SimpleMath::Matrix                                             m_projection;
 
-
+	int m_CurrentCamera; 
 
 };
 

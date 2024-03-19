@@ -28,7 +28,13 @@ Game::Game()
 
 	//functional
 
-	CurrentCamera = std::make_unique<Camera>();
+	//CurrentCamera = std::make_unique<Camera>();
+
+	m_CurrentCamera = 0;
+	for (int i = 0; i < 4; ++i)
+	{
+		m_Cameras.push_back(std::make_unique<Camera>());
+	}
 }
 
 Game::~Game()
@@ -107,6 +113,11 @@ void Game::Tick(InputCommands* Input)
 			Update(m_timer, &m_InputCommands);
 		});
 
+	if (m_CurrentCamera != m_InputCommands.CameraSelected)
+	{
+		m_CurrentCamera = m_InputCommands.CameraSelected;
+	}
+
 #ifdef DXTK_AUDIO
 	// Only update audio engine once per frame
 	if (!m_audEngine->IsCriticalError() && m_audEngine->Update())
@@ -126,14 +137,16 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
 	//camera motion is on a plane, so kill the 7 component of the look direction
 
-	CurrentCamera->Update(&m_InputCommands);
-	CurrentCamera->HandleMouse(Inputs);
-	CurrentCamera->CreateLookAt();
 
-	m_batchEffect->SetView(CurrentCamera->GetView());
+	m_Cameras[m_CurrentCamera]->Update(&m_InputCommands);
+	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
+	m_Cameras[m_CurrentCamera]->CreateLookAt();
+
+	m_batchEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
 	m_batchEffect->SetWorld(Matrix::Identity);
-	m_displayChunk.m_terrainEffect->SetView(CurrentCamera->GetView());
+	m_displayChunk.m_terrainEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
+
 
 #ifdef DXTK_AUDIO
 	m_audioTimerAcc -= (float)timer.GetElapsedSeconds();
@@ -208,7 +221,7 @@ void Game::Render()
 
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
-		m_displayList[i].m_model->Draw(context, *m_states, local, CurrentCamera->GetView(), m_projection, false);	//last variable in draw,  make TRUE for wireframe
+		m_displayList[i].m_model->Draw(context, *m_states, local, m_Cameras[m_CurrentCamera]->GetView(), m_projection, false);	//last variable in draw,  make TRUE for wireframe
 
 		m_deviceResources->PIXEndEvent();
 	}
@@ -456,34 +469,41 @@ int Game::MousePicking()
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
 		//Unproject the points on the near and far plane, with respect to the matrix we just created.
-		XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_ScreenDimensions.right, m_ScreenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, CurrentCamera->GetView(), local);
-		XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_ScreenDimensions.right, m_ScreenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, CurrentCamera->GetView(), local);
-
-		//turn the transformed points into our picking vector. 
-		XMVECTOR pickingVector = farPoint - nearPoint;
-		pickingVector = XMVector3Normalize(pickingVector);
-
-		//loop through mesh list for object
-		for (int y = 0; y < m_displayList[i].m_model.get()->meshes.size(); y++)
+		if (m_Cameras[m_CurrentCamera] != nullptr)
 		{
-			//checking for ray intersection
-			if (m_displayList[i].m_model.get()->meshes[y]->boundingBox.Intersects(nearPoint, pickingVector, pickedDistance))
+			XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_ScreenDimensions.right, m_ScreenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, m_Cameras[m_CurrentCamera]->GetView(), local);
+			XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_ScreenDimensions.right, m_ScreenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, m_Cameras[m_CurrentCamera]->GetView(), local);
+
+
+
+			//turn the transformed points into our picking vector. 
+			XMVECTOR pickingVector = farPoint - nearPoint;
+			pickingVector = XMVector3Normalize(pickingVector);
+
+			//loop through mesh list for object
+			for (int y = 0; y < m_displayList[i].m_model.get()->meshes.size(); y++)
 			{
-				if (selectedID == -1)
+				//checking for ray intersection
+				if (m_displayList[i].m_model.get()->meshes[y]->boundingBox.Intersects(nearPoint, pickingVector, pickedDistance))
 				{
-					selectedID = i;
-				}
-				else
-				{
-					float CurrentObjectDistance = 0;
-					float newObjectDistance = 0;
-					CurrentObjectDistance = CalculateDistanceBetween(m_displayList[selectedID].m_model.get()->meshes[y]->boundingBox.Center, CurrentCamera->GetPos());
-					newObjectDistance = CalculateDistanceBetween(m_displayList[i].m_model.get()->meshes[y]->boundingBox.Center, CurrentCamera->GetPos());
-					if (newObjectDistance < CurrentObjectDistance)
+					if (selectedID == -1)
 					{
 						selectedID = i;
 					}
+					else
+					{
 
+						float CurrentObjectDistance = 0;
+						float newObjectDistance = 0;
+						CurrentObjectDistance = CalculateDistanceBetween(m_displayList[selectedID].m_model.get()->meshes[y]->boundingBox.Center, m_Cameras[m_CurrentCamera]->GetPos());
+						newObjectDistance = CalculateDistanceBetween(m_displayList[i].m_model.get()->meshes[y]->boundingBox.Center, m_Cameras[m_CurrentCamera]->GetPos());
+						if (newObjectDistance < CurrentObjectDistance)
+						{
+							selectedID = i;
+						}
+
+
+					}
 				}
 			}
 		}
@@ -512,7 +532,7 @@ void Game::NewAudioDevice()
 		// Setup a retry in 1 second
 		m_audioTimerAcc = 1.f;
 		m_retryDefault = true;
-}
+	}
 }
 #endif
 

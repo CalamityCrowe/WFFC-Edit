@@ -111,7 +111,7 @@ void Camera::HandleMouse(InputCommands* Input)
 
 		newMouse = DirectX::SimpleMath::Vector2(Input->mouseX, Input->mouseY);
 
-		if (Input->LMB)
+		if (Input->RMB)
 		{
 			DirectX::SimpleMath::Vector2 Difference;
 
