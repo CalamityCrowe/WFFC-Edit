@@ -52,7 +52,9 @@ public:
 	void SaveDisplayChunk(ChunkObject* SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
 
+	int MousePicking();
 
+	static float CalculateDistanceBetween(DirectX::XMFLOAT3 point1, DirectX::SimpleMath::Vector3 point2);
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
@@ -71,6 +73,8 @@ private:
 	std::vector<DisplayObject>			m_displayList;
 	DisplayChunk						m_displayChunk;
 	InputCommands						m_InputCommands;
+
+	RECT m_ScreenDimensions; 
 
 	int m_width, m_height;
 
@@ -122,6 +126,7 @@ private:
 
 	DirectX::SimpleMath::Matrix                                             m_world;
 	DirectX::SimpleMath::Matrix                                             m_projection;
+
 
 
 };

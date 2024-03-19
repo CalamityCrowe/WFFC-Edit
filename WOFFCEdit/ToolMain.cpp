@@ -290,6 +290,12 @@ void ToolMain::Tick(MSG* msg)
 		//resend scenegraph to Direct X renderer
 
 	//Renderer Update Call
+	if(m_toolInputCommands.LMB)
+	{
+		m_selectedObject = m_d3dRenderer.MousePicking(); 
+		m_toolInputCommands.LMB = false; 
+	}
+
 	m_d3dRenderer.Tick(&m_toolInputCommands);
 }
 
@@ -319,7 +325,12 @@ void ToolMain::UpdateInput(MSG* msg)
 	case WM_RBUTTONUP:
 		m_toolInputCommands.RMB = false;
 		break;
-
+	case WM_LBUTTONDOWN:
+		m_toolInputCommands.LMB = true; 
+		break;
+	case WM_LBUTTONUP:
+		m_toolInputCommands.LMB = false; 
+		break;
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
 	//WASD movement

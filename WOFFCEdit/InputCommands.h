@@ -16,5 +16,5 @@ struct InputCommands
 	float mouseY;
 
 	bool RMB; 
-
+	bool LMB; 
 };

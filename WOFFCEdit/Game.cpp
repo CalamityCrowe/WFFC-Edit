@@ -51,18 +51,20 @@ void Game::Initialize(HWND window, int width, int height)
 
 	m_mouse = std::make_unique<Mouse>();
 	m_mouse->SetWindow(window);
-	m_mouse->SetMode(Mouse::MODE_ABSOLUTE); 
+	m_mouse->SetMode(Mouse::MODE_ABSOLUTE);
 
 	m_deviceResources->SetWindow(window, width, height);
 
 	m_width = width;
-	m_height = height; 
+	m_height = height;
 
 	m_deviceResources->CreateDeviceResources();
 	CreateDeviceDependentResources();
 
 	m_deviceResources->CreateWindowSizeDependentResources();
 	CreateWindowSizeDependentResources();
+
+	GetClientRect(window, &m_ScreenDimensions);
 
 #ifdef DXTK_AUDIO
 	// Create DirectXTK for Audio objects
@@ -99,10 +101,10 @@ void Game::Tick(InputCommands* Input)
 {
 	//copy over the input commands so we have a local version to use elsewhere.
 	m_InputCommands = *Input;
-	
+
 	m_timer.Tick([&]()
 		{
-			Update(m_timer,&m_InputCommands);
+			Update(m_timer, &m_InputCommands);
 		});
 
 #ifdef DXTK_AUDIO
@@ -126,7 +128,7 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 
 	CurrentCamera->Update(&m_InputCommands);
 	CurrentCamera->HandleMouse(Inputs);
-	CurrentCamera->CreateLookAt(); 
+	CurrentCamera->CreateLookAt();
 
 	m_batchEffect->SetView(CurrentCamera->GetView());
 	m_batchEffect->SetWorld(Matrix::Identity);
@@ -155,7 +157,7 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 			if (m_audioEvent >= 11)
 				m_audioEvent = 0;
 		}
-}
+	}
 #endif
 
 
@@ -424,6 +426,84 @@ void Game::SaveDisplayChunk(ChunkObject* SceneChunk)
 	m_displayChunk.SaveHeightMap();			//save heightmap to file.
 }
 
+void Game::ClearDisplayList()
+{
+}
+
+int Game::MousePicking()
+{
+	int selectedID = -1;
+	float pickedDistance = 0;
+
+	//setup near and far planes of frustum with mouse X and mouse y passed down from Toolmain. 
+	//they may look the same but note, the difference in Z
+	const XMVECTOR nearSource = XMVectorSet(m_InputCommands.mouseX, m_InputCommands.mouseY, 0.0f, 1.0f);
+	const XMVECTOR farSource = XMVectorSet(m_InputCommands.mouseX, m_InputCommands.mouseY, 1.0f, 1.0f);
+
+	//Loop through entire display list of objects and pick with each in turn. 
+	for (int i = 0; i < m_displayList.size(); i++)
+	{
+		//Get the scale factor and translation of the object
+		const XMVECTORF32 scale = { m_displayList[i].m_scale.x,		m_displayList[i].m_scale.y,		m_displayList[i].m_scale.z };
+		const XMVECTORF32 translate = { m_displayList[i].m_position.x,	m_displayList[i].m_position.y,	m_displayList[i].m_position.z };
+
+		//convert euler angles into a quaternion for the rotation of the object
+		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].m_orientation.y * 3.1415 / 180,
+			m_displayList[i].m_orientation.x * 3.1415 / 180,
+			m_displayList[i].m_orientation.z * 3.1415 / 180);
+
+		//create set the matrix of the selected object in the world based on the translation, scale and rotation.
+		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
+
+		//Unproject the points on the near and far plane, with respect to the matrix we just created.
+		XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_ScreenDimensions.right, m_ScreenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, CurrentCamera->GetView(), local);
+		XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_ScreenDimensions.right, m_ScreenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, CurrentCamera->GetView(), local);
+
+		//turn the transformed points into our picking vector. 
+		XMVECTOR pickingVector = farPoint - nearPoint;
+		pickingVector = XMVector3Normalize(pickingVector);
+
+		//loop through mesh list for object
+		for (int y = 0; y < m_displayList[i].m_model.get()->meshes.size(); y++)
+		{
+			//checking for ray intersection
+			if (m_displayList[i].m_model.get()->meshes[y]->boundingBox.Intersects(nearPoint, pickingVector, pickedDistance))
+			{
+				if (selectedID == -1)
+				{
+					selectedID = i;
+				}
+				else
+				{
+					float CurrentObjectDistance = 0;
+					float newObjectDistance = 0;
+					CurrentObjectDistance = CalculateDistanceBetween(m_displayList[selectedID].m_model.get()->meshes[y]->boundingBox.Center, CurrentCamera->GetPos());
+					newObjectDistance = CalculateDistanceBetween(m_displayList[i].m_model.get()->meshes[y]->boundingBox.Center, CurrentCamera->GetPos());
+					if (newObjectDistance < CurrentObjectDistance)
+					{
+						selectedID = i;
+					}
+
+				}
+			}
+		}
+	}
+
+	//if we got a hit.  return it.  
+	return selectedID;
+}
+
+float Game::CalculateDistanceBetween(DirectX::XMFLOAT3 point1, DirectX::SimpleMath::Vector3 point2)
+{
+	float distance = 0;
+
+	distance = sqrt((point1.x - point2.x) * (point1.x - point2.x) +
+		(point1.y - point2.y) * (point1.y - point2.y) +
+		(point1.z - point2.z) * (point1.z - point2.z));
+
+	return distance;
+}
+
 #ifdef DXTK_AUDIO
 void Game::NewAudioDevice()
 {
@@ -432,7 +512,7 @@ void Game::NewAudioDevice()
 		// Setup a retry in 1 second
 		m_audioTimerAcc = 1.f;
 		m_retryDefault = true;
-	}
+}
 }
 #endif
 
