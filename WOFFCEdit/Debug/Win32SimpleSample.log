@@ -1,22 +1,45 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Win32SimpleSample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  ToolMain.cpp
-  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
-c:\programming\wffc\woffcedit\toolmain.cpp(91): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(92): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(93): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(94): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(95): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(97): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(98): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(99): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(111): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(112): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(113): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(117): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(118): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(119): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(123): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\programming\wffc\woffcedit\toolmain.cpp(124): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-  Win32SimpleSample.vcxproj -> C:\Programming\WFFC\WOFFCEdit\Debug\WoFEdit.exe
-  Win32SimpleSample.vcxproj -> C:\Programming\WFFC\WOFFCEdit\Debug\WoFEdit.pdb (Partial PDB)
+﻿C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Win32SimpleSample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Camera.cpp
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\InputCommands.h(3,8): warning C4099: 'InputCommands': type name first seen using 'class' now seen using 'struct'
+  (compiling source file 'Camera.cpp')
+  E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\InputCommands.h(3,8):
+  see declaration of 'InputCommands'
+  
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(10,16): warning C4305: '=': truncation from 'double' to 'float'
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(72,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(73,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(74,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(76,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(77,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(78,35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(113,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(114,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(167,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(168,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(169,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(171,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(172,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.cpp(173,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Game.cpp
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Camera.h(7,7): warning C4099: 'InputCommands': type name first seen using 'struct' now seen using 'class'
+  (compiling source file 'Game.cpp')
+  E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\InputCommands.h(3,8):
+  see declaration of 'InputCommands'
+  
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(222,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(221,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(220,98): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(206,10): warning C4101: 'Buffer': unreferenced local variable
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(459,20): warning C4018: '<': signed/unsigned mismatch
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(468,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(467,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(466,98): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(476,112): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(476,86): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(477,110): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(477,84): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(486,22): warning C4018: '<': signed/unsigned mismatch
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(509,29): warning C4018: '<': signed/unsigned mismatch
+E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Game.cpp(526,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  Win32SimpleSample.vcxproj -> E:\Wank Betts Module\WFFC-Edit\WOFFCEdit\Debug\WoFEdit.exe

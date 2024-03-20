@@ -139,7 +139,7 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 
 
 	m_Cameras[m_CurrentCamera]->Update(&m_InputCommands);
-	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
+	//m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
 
@@ -506,14 +506,10 @@ int Game::MousePicking()
 
 
 					}
-					for (int cam = 0; cam < m_Cameras.size(); ++cam)
-					{
-
-						if (!CompareXMFloat3(m_Cameras[cam]->GetArcTarget(), m_displayList[selectedID].m_model.get()->meshes[y]->boundingBox.Center)) // returns false if they are not the same
+						for (int cam = 0; cam < m_Cameras.size(); ++cam)
 						{
-							m_Cameras[cam]->SetArcTarget(m_displayList[selectedID].m_model.get()->meshes[y]->boundingBox.Center);
+							m_Cameras[cam]->SetArcTarget(m_displayList[selectedID].m_position);
 						}
-					}
 				}
 			}
 		}
