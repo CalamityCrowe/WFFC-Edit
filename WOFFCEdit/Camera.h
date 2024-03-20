@@ -4,7 +4,7 @@
 #include "DisplayChunk.h"
 
 
-class InputCommands; 
+class InputCommands;
 
 class Camera
 {
@@ -20,11 +20,10 @@ public:
 		m_view = DirectX::SimpleMath::Matrix::CreateLookAt(m_camPos, m_camLookAt, DirectX::SimpleMath::Vector3::UnitY);
 	}
 
-	
 
+	void SetArcTarget(DirectX::XMFLOAT3 newTarg) { ArcTarget = newTarg; }
+	DirectX::XMFLOAT3 GetArcTarget() { return ArcTarget; }
 
-	void SetArcTarget(DirectX::XMFLOAT3 newTarg) { ArcTarget = newTarg;  }
-	DirectX::XMFLOAT3 GetArcTarget() { return ArcTarget;  }
 private:
 	float								m_movespeed;
 
@@ -35,20 +34,24 @@ private:
 	DirectX::SimpleMath::Vector3		m_camRight;
 	float m_camRotRate;
 
+
 	DirectX::SimpleMath::Matrix			m_view;
 
-	DirectX::SimpleMath::Vector2 oldMouse, newMouse; 
+	DirectX::SimpleMath::Vector2 oldMouse, newMouse;
 
-	DirectX::XMFLOAT3 ArcTarget; 
+	DirectX::XMFLOAT3 ArcTarget;
+
+	float orbitRadius;
+	float orbitAngle;
 
 public:
-	DirectX::SimpleMath::Matrix GetView()const { return m_view;  }
-	DirectX::SimpleMath::Vector3 GetPos() const { return m_camPos;  }
-	DirectX::SimpleMath::Vector3 GetRight() const { return m_camRight;  }
+	DirectX::SimpleMath::Matrix GetView()const { return m_view; }
+	DirectX::SimpleMath::Vector3 GetPos() const { return m_camPos; }
+	DirectX::SimpleMath::Vector3 GetRight() const { return m_camRight; }
 
 
 
-	
+
 
 };
 

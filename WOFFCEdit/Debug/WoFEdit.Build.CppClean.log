@@ -1,22 +1,5 @@
-d:\mydocs\development\wffc-edit\woffcedit\debug\vc140.pdb
-d:\mydocs\development\wffc-edit\woffcedit\debug\vc140.idb
-d:\mydocs\development\wffc-edit\woffcedit\debug\chunkobject.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\deviceresources.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\displaychunk.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\displayobject.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\game.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\mfcframe.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\mfcmain.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\mfcrenderframe.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\main.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\sceneobject.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\selectdialogue.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\toolmain.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\pch.obj
-d:\mydocs\development\wffc-edit\woffcedit\debug\wofedit.ilk
-d:\mydocs\development\wffc-edit\woffcedit\debug\wofedit.exe
-d:\mydocs\development\wffc-edit\woffcedit\debug\wofedit.pdb
-d:\mydocs\development\wffc-edit\woffcedit\debug\win32simplesample.res
+c:\programming\wffc\woffcedit\debug\vc141.pdb
+c:\programming\wffc\woffcedit\debug\vc141.idb
 c:\programming\wffc\woffcedit\debug\chunkobject.obj
 c:\programming\wffc\woffcedit\debug\deviceresources.obj
 c:\programming\wffc\woffcedit\debug\displaychunk.obj
@@ -24,25 +7,42 @@ c:\programming\wffc\woffcedit\debug\displayobject.obj
 c:\programming\wffc\woffcedit\debug\game.obj
 c:\programming\wffc\woffcedit\debug\main.obj
 c:\programming\wffc\woffcedit\debug\mfcframe.obj
-c:\programming\wffc\woffcedit\debug\mfcmain.obj
 c:\programming\wffc\woffcedit\debug\mfcrenderframe.obj
 c:\programming\wffc\woffcedit\debug\pch.obj
+c:\programming\wffc\woffcedit\debug\mfcmain.obj
 c:\programming\wffc\woffcedit\debug\sceneobject.obj
 c:\programming\wffc\woffcedit\debug\selectdialogue.obj
-c:\programming\wffc\woffcedit\debug\sqlite3.obj
 c:\programming\wffc\woffcedit\debug\toolmain.obj
+c:\programming\wffc\woffcedit\debug\sqlite3.obj
 c:\programming\wffc\woffcedit\debug\wofedit.ilk
-c:\programming\wffc\woffcedit\debug\win32simplesample.res
-c:\programming\wffc\woffcedit\debug\vc140.idb
-c:\programming\wffc\woffcedit\debug\vc140.pdb
-c:\programming\wffc\woffcedit\debug\wofedit.pdb
 c:\programming\wffc\woffcedit\debug\wofedit.exe
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\cl.command.1.tlog
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\cl.read.1.tlog
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\cl.write.1.tlog
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\link.command.1.tlog
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\link.read.1.tlog
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\link.write.1.tlog
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\rc.command.1.tlog
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\rc.read.1.tlog
-c:\programming\wffc\woffcedit\debug\wofedit.tlog\rc.write.1.tlog
+c:\programming\wffc\woffcedit\debug\wofedit.pdb
+c:\programming\wffc\woffcedit\debug\win32simplesample.res
+e:\wank betts module\wffc-edit\woffcedit\debug\chunkobject.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\deviceresources.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\displaychunk.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\displayobject.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\game.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\main.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\mfcframe.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\mfcmain.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\mfcrenderframe.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\pch.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\sceneobject.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\selectdialogue.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\sqlite3.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\toolmain.obj
+e:\wank betts module\wffc-edit\woffcedit\debug\win32simplesample.res
+e:\wank betts module\wffc-edit\woffcedit\debug\vc141.idb
+e:\wank betts module\wffc-edit\woffcedit\debug\vc141.pdb
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.pdb
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.exe
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\cl.command.1.tlog
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\cl.read.1.tlog
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\cl.write.1.tlog
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\link.command.1.tlog
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\link.read.1.tlog
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\link.write.1.tlog
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\rc.command.1.tlog
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\rc.read.1.tlog
+e:\wank betts module\wffc-edit\woffcedit\debug\wofedit.tlog\rc.write.1.tlog
