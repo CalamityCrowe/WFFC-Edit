@@ -35,6 +35,7 @@ Camera::Camera()
 
 	orbitRadius = 5;
 	orbitAngle = 0;
+	ArcTarget = DirectX::XMFLOAT3(0, 0, 0);
 
 }
 

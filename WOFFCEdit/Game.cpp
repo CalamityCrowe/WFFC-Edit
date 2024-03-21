@@ -139,7 +139,9 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 
 
 	m_Cameras[m_CurrentCamera]->Update(&m_InputCommands);
-	//m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
+	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
+	m_Cameras[m_CurrentCamera]->HandleMovement(&m_InputCommands);
+
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
 
