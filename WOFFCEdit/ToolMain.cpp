@@ -351,6 +351,11 @@ void ToolMain::UpdateInput(MSG* msg)
 	m_toolInputCommands.IncreaseOrbit = (m_keyArray['O']) ? true : false;
 	m_toolInputCommands.DecreaseOrbit = (m_keyArray['U']) ? true : false;
 
+	m_toolInputCommands.copy = (m_keyArray['C']) ? true : false;
+	m_toolInputCommands.undo = (m_keyArray['Z']) ? true : false;
+	m_toolInputCommands.redo = (m_keyArray['Y']) ? true : false;
+	m_toolInputCommands.deleteSelected = (m_keyArray['B']) ? true : false;
+
 	if (m_keyArray['0'])
 	{
 		m_toolInputCommands.CameraSelected = 0;

@@ -112,11 +112,7 @@ void Game::Tick(InputCommands* Input)
 		{
 			Update(m_timer, &m_InputCommands);
 		});
-
-	if (m_CurrentCamera != m_InputCommands.CameraSelected)
-	{
-		m_CurrentCamera = m_InputCommands.CameraSelected;
-	}
+	
 
 #ifdef DXTK_AUDIO
 	// Only update audio engine once per frame
@@ -137,6 +133,11 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
 	//camera motion is on a plane, so kill the 7 component of the look direction
 
+	if (m_CurrentCamera != m_InputCommands.CameraSelected)
+	{
+		m_CurrentCamera = m_InputCommands.CameraSelected;
+	}
+
 
 	m_Cameras[m_CurrentCamera]->Update(&m_InputCommands);
 	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
@@ -144,6 +145,15 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
+
+	if(m_InputCommands.copy)
+	{
+		Copy(m_currentSelection);
+	}
+	if(m_InputCommands.deleteSelected)
+	{
+		DeleteSelected(m_currentSelection);
+	}
 
 
 	m_batchEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
@@ -493,6 +503,7 @@ int Game::MousePicking()
 					if (selectedID == -1)
 					{
 						selectedID = i;
+						m_currentSelection = selectedID;
 					}
 					else
 					{
@@ -504,6 +515,7 @@ int Game::MousePicking()
 						if (newObjectDistance < CurrentObjectDistance)
 						{
 							selectedID = i;
+							m_currentSelection = selectedID;
 						}
 
 
@@ -535,6 +547,45 @@ float Game::CalculateDistanceBetween(DirectX::XMFLOAT3 point1, DirectX::SimpleMa
 bool Game::CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2)
 {
 	return (point1.x == point2.x && point1.y == point2.y && point1.z == point2.z);
+}
+
+void Game::Copy(int i)
+{
+	if(i < 0 ) // checks if the object is valid
+	{
+		return;
+	}
+	CopyObject = &m_displayList[i]; // this copies the object at this point
+}
+
+void Game::Undo()
+{
+
+}
+
+void Game::Redo()
+{
+}
+
+void Game::DeleteSelected(int i)
+{
+	if(i < 0) // checks if the object is valid
+	{
+		return;
+	}
+	m_displayList.erase(m_displayList.begin() + i); // this deletes the object at this point
+	m_currentSelection = -1; // resets this to -1 so that the object is no longer selected for any other operations
+}
+
+void Game::PasteObject()
+{
+	if(CopyObject == nullptr) // checks if the object is valid
+	{
+		return;
+	}
+	m_displayList.push_back(*CopyObject); // this pastes the object at this point
+	CopyObject = nullptr; // resets the copy object to null
+
 }
 
 

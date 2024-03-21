@@ -58,6 +58,16 @@ public:
 
 	bool CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2);
 
+
+	// ObjectManipulation
+	void Copy(int i);
+	void Undo();
+	void Redo();
+	void DeleteSelected(int i);
+	void PasteObject();
+
+
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
@@ -76,9 +86,13 @@ private:
 	DisplayChunk						m_displayChunk;
 	InputCommands						m_InputCommands;
 
+	DisplayObject* CopyObject; 
+
 	RECT m_ScreenDimensions; 
 
 	int m_width, m_height;
+
+	int m_currentSelection;
 
 	//control variables
 	bool m_grid;							//grid rendering on / off

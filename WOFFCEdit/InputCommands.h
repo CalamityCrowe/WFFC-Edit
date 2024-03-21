@@ -24,5 +24,10 @@ struct InputCommands
 	bool RMB;
 	bool LMB;
 
+	bool copy;
+	bool undo;
+	bool redo;
+	bool deleteSelected;
+
 	int CameraSelected = 0;
 };
