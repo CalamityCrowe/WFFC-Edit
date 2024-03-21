@@ -85,6 +85,8 @@ private:
 	std::vector<DisplayObject>			m_displayList;
 	DisplayChunk						m_displayChunk;
 	InputCommands						m_InputCommands;
+	std::wstring texturewstr; 
+
 
 	DisplayObject* CopyObject; 
 
@@ -92,7 +94,7 @@ private:
 
 	int m_width, m_height;
 
-	int m_currentSelection;
+	int m_currentSelection = -1;
 
 	//control variables
 	bool m_grid;							//grid rendering on / off

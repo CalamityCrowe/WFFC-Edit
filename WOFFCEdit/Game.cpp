@@ -112,7 +112,7 @@ void Game::Tick(InputCommands* Input)
 		{
 			Update(m_timer, &m_InputCommands);
 		});
-	
+
 
 #ifdef DXTK_AUDIO
 	// Only update audio engine once per frame
@@ -137,7 +137,18 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	{
 		m_CurrentCamera = m_InputCommands.CameraSelected;
 	}
+	for (int i = 0; i < m_displayList.size(); ++i)
+	{
+		if (i == m_currentSelection)
+		{
 
+
+		}
+		else
+		{
+			m_displayList[i].m_wireframe = false;
+		}
+	}
 
 	m_Cameras[m_CurrentCamera]->Update(&m_InputCommands);
 	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
@@ -146,11 +157,11 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
 
-	if(m_InputCommands.copy)
+	if (m_InputCommands.copy)
 	{
 		Copy(m_currentSelection);
 	}
-	if(m_InputCommands.deleteSelected)
+	if (m_InputCommands.deleteSelected)
 	{
 		DeleteSelected(m_currentSelection);
 	}
@@ -379,7 +390,7 @@ void Game::BuildDisplayList(std::vector<SceneObject>* SceneGraph)
 		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)
 
 		//Load Texture
-		std::wstring texturewstr = StringToWCHART(SceneGraph->at(i).tex_diffuse_path);								//convect string to Wchar
+		texturewstr = StringToWCHART(SceneGraph->at(i).tex_diffuse_path);								//convect string to Wchar
 		HRESULT rs;
 		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
 
@@ -504,6 +515,7 @@ int Game::MousePicking()
 					{
 						selectedID = i;
 						m_currentSelection = selectedID;
+
 					}
 					else
 					{
@@ -520,14 +532,44 @@ int Game::MousePicking()
 
 
 					}
-						for (int cam = 0; cam < m_Cameras.size(); ++cam)
-						{
-							m_Cameras[cam]->SetArcTarget(m_displayList[selectedID].m_position);
-						}
+					for (int cam = 0; cam < m_Cameras.size(); ++cam)
+					{
+						m_Cameras[cam]->SetArcTarget(m_displayList[selectedID].m_position);
+					}
 				}
 			}
 		}
 	}
+
+	for (int i = 0; i < m_displayList.size(); ++i)
+	{
+		if (i == selectedID)
+		{
+			CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), L"database/data/error.dds", nullptr, &m_displayList[selectedID].m_texture_diffuse);
+			m_displayList[selectedID].m_model->UpdateEffects([&](IEffect* effect)
+				{
+					auto lights = dynamic_cast<BasicEffect*>(effect);
+					if (lights)
+					{
+						lights->SetTexture(m_displayList[selectedID].m_texture_diffuse);
+					}
+				});
+		}
+		else
+		{
+			CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), texturewstr.c_str(), nullptr, &m_displayList[selectedID].m_texture_diffuse);
+			m_displayList[i].m_model->UpdateEffects([&](IEffect* effect)
+				{
+					auto lights = dynamic_cast<BasicEffect*>(effect);
+					if (lights)
+					{
+						lights->SetTexture(m_displayList[selectedID].m_texture_diffuse);
+					}
+				});
+		}
+	}
+
+
 
 	//if we got a hit.  return it.  
 	return selectedID;
@@ -551,7 +593,7 @@ bool Game::CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2)
 
 void Game::Copy(int i)
 {
-	if(i < 0 ) // checks if the object is valid
+	if (i < 0) // checks if the object is valid
 	{
 		return;
 	}
@@ -569,7 +611,7 @@ void Game::Redo()
 
 void Game::DeleteSelected(int i)
 {
-	if(i < 0) // checks if the object is valid
+	if (i < 0) // checks if the object is valid
 	{
 		return;
 	}
@@ -579,9 +621,17 @@ void Game::DeleteSelected(int i)
 
 void Game::PasteObject()
 {
-	if(CopyObject == nullptr) // checks if the object is valid
+	if (CopyObject == nullptr) // checks if the object is valid
 	{
 		return;
+	}
+	for (int i = 0; i < m_displayList.size(); ++i)
+	{
+		if (CopyObject->m_ID == m_displayList[i].m_ID)
+		{
+			CopyObject->m_ID = m_displayList.size(); // this changes the ID of the object to the next available ID
+
+		}
 	}
 	m_displayList.push_back(*CopyObject); // this pastes the object at this point
 	CopyObject = nullptr; // resets the copy object to null
