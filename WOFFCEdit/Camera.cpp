@@ -2,6 +2,8 @@
 
 #include "Camera.h"
 
+#include <complex>
+
 #include "InputCommands.h"
 
 
@@ -42,6 +44,15 @@ void Camera::Update(InputCommands* commands)
 {
 	//DirectX::SimpleMath::Vector3 planarMotionVector = m_camLookDirection;
 	//planarMotionVector.y = 0.0;
+	if (commands->arcBall)
+	{
+		m_camRotRate = 0.1f;
+	}
+	else
+	{
+		m_camRotRate = 3.0f;
+	}
+
 	if (commands->rotRight)
 	{
 		m_camOrientation.y += m_camRotRate;
@@ -58,7 +69,6 @@ void Camera::Update(InputCommands* commands)
 	{
 		m_camOrientation.x -= m_camRotRate;
 	}
-
 
 	if (commands->RMB == false)
 	{
@@ -110,23 +120,21 @@ void Camera::Update(InputCommands* commands)
 		}
 		else
 		{
-			float orbX = orbitRadius * sin(m_camOrientation.y);
-			float orbZ = orbitRadius * cos(m_camOrientation.y);
+
+			float orbX = orbitRadius * sin(m_camOrientation.y) * cos(m_camOrientation.x);
+			float orbY = orbitRadius * sin(m_camOrientation.x);
+			float orbZ = orbitRadius * cos(m_camOrientation.y) * cos(m_camOrientation.x);
 			m_camPos.x = ArcTarget.x + orbX;
+			m_camPos.y = ArcTarget.y + orbY;
 			m_camPos.z = ArcTarget.z + orbZ;
 
 			m_camLookDirection = ArcTarget - m_camPos;
 			m_camLookDirection.Normalize();
 
-			if (commands->forward)
-			{
-				m_camPos += m_camLookDirection * m_movespeed;
-			}
-			if (commands->back)
-			{
-				m_camPos -= m_camLookDirection * m_movespeed;
-			}
+
+
 			m_camLookAt = ArcTarget;
+
 
 
 		}
@@ -176,39 +184,75 @@ void Camera::HandleMouse(InputCommands* Input)
 				m_camLookDirection.y = sinP;
 				m_camLookDirection.z = cosP * -cosY;
 
+				m_camLookDirection.Cross(DirectX::SimpleMath::Vector3::UnitY, m_camRight);
+
+
 				m_camLookAt = m_camPos + m_camLookDirection;
+			}
+			else
+			{
+				//arcball rotation
+				// This needs implemented and needs to know about the selected object
+				Difference.Normalize();
+				if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
+				{
+					m_camOrientation.y += m_camRotRate * Difference.x; // yaw
+					m_camOrientation.x -= m_camRotRate * Difference.y; // pitch
+				}
+
+				float orbX = orbitRadius * sin(m_camOrientation.y) * cos(m_camOrientation.x);
+				float orbY = orbitRadius * sin(m_camOrientation.x);
+				float orbZ = orbitRadius * cos(m_camOrientation.y) * cos(m_camOrientation.x);
+				m_camPos.x = ArcTarget.x + orbX;
+				m_camPos.y = ArcTarget.y + orbY;
+				m_camPos.z = ArcTarget.z + orbZ;
+
+				m_camLookDirection = ArcTarget - m_camPos;
+				m_camLookDirection.Normalize();
+
+				m_camLookDirection.Cross(DirectX::SimpleMath::Vector3::UnitY, m_camRight);
+
+
+
+				m_camLookAt = ArcTarget;
+
 
 			}
-			//else
-			//{
-			//	//arcball rotation
-			//	// This needs implemented and needs to know about the selected object
-			//	Difference.Normalize();
-			//	if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
-			//	{
-			//		// this is where the camera placement is updated
-			//	}
-
-			//	m_camLookDirection = ArcTarget - m_camPos;
-
-			//	m_camLookDirection.Normalize();
-
-			//	m_camLookAt = m_camPos + m_camLookDirection;
-			//	DirectX::SimpleMath::Vector3 up;
-			//	up.Cross(m_camRight, m_camLookAt);
-			//	DirectX::SimpleMath::Vector3 correctedRight;
-			//	correctedRight.Cross(m_camLookAt, up);
-
-
-			//	m_camOrientation.x = asinf(m_camLookAt.y);
-			//	m_camOrientation.y = atan2f(m_camLookAt.x, m_camLookAt.z);
-			//	m_camOrientation.z = atan2f(m_camLookDirection.y, up.y);
-
-			//}
 		}
 
 
 		oldMouse = newMouse;
 	}
 
+}
+
+void Camera::HandleMovement(InputCommands* Input)
+{
+	if (Input)
+	{
+		if (Input->forward)
+		{
+			m_camPos += m_camLookDirection * m_movespeed;
+		}
+		if (Input->back)
+		{
+			m_camPos -= m_camLookDirection * m_movespeed;
+		}
+		if (Input->right)
+		{
+			m_camPos += m_camRight * m_movespeed;
+		}
+		if (Input->left)
+		{
+			m_camPos -= m_camRight * m_movespeed;
+		}
+		if (Input->IncreaseOrbit)
+			orbitRadius += 0.05;
+		if (Input->DecreaseOrbit)
+			orbitRadius -= 0.05;
+
+
+		m_camLookAt = m_camPos + m_camLookDirection;
+		CreateLookAt();
+	}
 }

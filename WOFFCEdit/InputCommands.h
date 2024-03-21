@@ -17,6 +17,10 @@ struct InputCommands
 	float mouseX;
 	float mouseY;
 
+	bool IncreaseOrbit;
+	bool DecreaseOrbit;
+
+
 	bool RMB;
 	bool LMB;
 

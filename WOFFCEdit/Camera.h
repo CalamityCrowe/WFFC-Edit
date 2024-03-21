@@ -15,6 +15,8 @@ public:
 
 	void HandleMouse(InputCommands* Input);
 
+	void HandleMovement(InputCommands* Input);
+
 	void CreateLookAt()
 	{
 		m_view = DirectX::SimpleMath::Matrix::CreateLookAt(m_camPos, m_camLookAt, DirectX::SimpleMath::Vector3::UnitY);

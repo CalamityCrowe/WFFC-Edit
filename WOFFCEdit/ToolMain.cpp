@@ -331,52 +331,26 @@ void ToolMain::UpdateInput(MSG* msg)
 	case WM_LBUTTONUP:
 		m_toolInputCommands.LMB = false;
 		break;
+
 	}
+
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
 	//WASD movement
-	if (m_keyArray['W'])
-	{
-		m_toolInputCommands.forward = true;
-	}
-	else m_toolInputCommands.forward = false;
 
-	if (m_keyArray['S'])
-	{
-		m_toolInputCommands.back = true;
-	}
-	else m_toolInputCommands.back = false;
-	if (m_keyArray['A'])
-	{
-		m_toolInputCommands.left = true;
-	}
-	else m_toolInputCommands.left = false;
-
-	if (m_keyArray['D'])
-	{
-		m_toolInputCommands.right = true;
-	}
-	else m_toolInputCommands.right = false;
 	//rotation
-	if (m_keyArray['E'])
-	{
-		m_toolInputCommands.rotRight = true;
-	}
-	else m_toolInputCommands.rotRight = false;
-	if (m_keyArray['Q'])
-	{
-		m_toolInputCommands.rotLeft = true;
-	}
-	else m_toolInputCommands.rotLeft = false;
-	if (m_keyArray['I'])
-	{
-		m_toolInputCommands.rotUp = true;
-	}
-	else m_toolInputCommands.rotUp = false;
-	if (m_keyArray['K'])
-	{
-		m_toolInputCommands.rotDown = true;
-	}
-	else m_toolInputCommands.rotDown = false;
+
+	m_toolInputCommands.forward = (m_keyArray['W']) ? true : false;
+	m_toolInputCommands.back = (m_keyArray['S']) ? true : false;
+	m_toolInputCommands.left = (m_keyArray['A']) ? true : false;
+	m_toolInputCommands.right = (m_keyArray['D']) ? true : false;
+	m_toolInputCommands.rotLeft = (m_keyArray['J']) ? true : false;
+	m_toolInputCommands.rotRight = (m_keyArray['L']) ? true : false;
+	m_toolInputCommands.rotUp = (m_keyArray['I']) ? true : false;
+	m_toolInputCommands.rotDown = (m_keyArray['K']) ? true : false;
+
+	m_toolInputCommands.IncreaseOrbit = (m_keyArray['O']) ? true : false;
+	m_toolInputCommands.DecreaseOrbit = (m_keyArray['U']) ? true : false;
+
 	if (m_keyArray['0'])
 	{
 		m_toolInputCommands.CameraSelected = 0;
@@ -394,10 +368,6 @@ void ToolMain::UpdateInput(MSG* msg)
 		m_toolInputCommands.CameraSelected = 3;
 	}
 
-	if (m_keyArray['R'])
-	{
-		m_toolInputCommands.arcBall = true;
-	}
-	else m_toolInputCommands.arcBall = false;
-
+	m_toolInputCommands.arcBall = (m_keyArray['R'] ? true : false);
+	m_toolInputCommands.focus = (m_keyArray['F'] ? true : false);
 }
