@@ -157,15 +157,18 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
 
-	if (m_InputCommands.copy)
+	if (m_InputCommands.copy == true)
 	{
 		Copy(m_currentSelection);
 	}
-	if (m_InputCommands.deleteSelected)
+	if (m_InputCommands.deleteSelected == true)
 	{
 		DeleteSelected(m_currentSelection);
 	}
-
+	if (m_InputCommands.paste == true)
+	{
+		Paste();
+	}
 
 	m_batchEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
 	m_batchEffect->SetWorld(Matrix::Identity);
@@ -540,30 +543,31 @@ int Game::MousePicking()
 			}
 		}
 	}
+	if (selectedID < 0) { return selectedID; }
 
 	for (int i = 0; i < m_displayList.size(); ++i)
 	{
 		if (i == selectedID)
 		{
-			CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), L"database/data/error.dds", nullptr, &m_displayList[selectedID].m_texture_diffuse);
-			m_displayList[selectedID].m_model->UpdateEffects([&](IEffect* effect)
-				{
-					auto lights = dynamic_cast<BasicEffect*>(effect);
-					if (lights)
-					{
-						lights->SetTexture(m_displayList[selectedID].m_texture_diffuse);
-					}
-				});
-		}
-		else
-		{
-			CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), texturewstr.c_str(), nullptr, &m_displayList[selectedID].m_texture_diffuse);
+			CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), L"database/data/error.dds", nullptr, &m_displayList[i].m_texture_diffuse);
 			m_displayList[i].m_model->UpdateEffects([&](IEffect* effect)
 				{
 					auto lights = dynamic_cast<BasicEffect*>(effect);
 					if (lights)
 					{
-						lights->SetTexture(m_displayList[selectedID].m_texture_diffuse);
+						lights->SetTexture(m_displayList[i].m_texture_diffuse);
+					}
+				});
+		}
+		else
+		{
+			CreateDDSTextureFromFile(m_deviceResources->GetD3DDevice(), texturewstr.c_str(), nullptr, &m_displayList[i].m_texture_diffuse);
+			m_displayList[i].m_model->UpdateEffects([&](IEffect* effect)
+				{
+					auto lights = dynamic_cast<BasicEffect*>(effect);
+					if (lights)
+					{
+						lights->SetTexture(m_displayList[i].m_texture_diffuse); // Use 'i' instead of 'selectedID'
 					}
 				});
 		}
@@ -597,7 +601,7 @@ void Game::Copy(int i)
 	{
 		return;
 	}
-	CopyObject = &m_displayList[i]; // this copies the object at this point
+	CopyObject = std::make_unique<DisplayObject>(m_displayList[i]); // this copies the object at this point
 }
 
 void Game::Undo()
@@ -616,26 +620,65 @@ void Game::DeleteSelected(int i)
 		return;
 	}
 	m_displayList.erase(m_displayList.begin() + i); // this deletes the object at this point
+	for (int newID = i; newID < m_displayList.size(); ++newID)
+	{
+		m_displayList[newID].m_ID = newID;
+	}
 	m_currentSelection = -1; // resets this to -1 so that the object is no longer selected for any other operations
 }
 
-void Game::PasteObject()
+void Game::Paste()
 {
 	if (CopyObject == nullptr) // checks if the object is valid
 	{
 		return;
 	}
-	for (int i = 0; i < m_displayList.size(); ++i)
+	else
 	{
-		if (CopyObject->m_ID == m_displayList[i].m_ID)
+
+		DisplayObject a = *CopyObject;
+
+		bool b = false;
+		int newID = 0;
+		if (m_displayList.size() > 0)
 		{
-			CopyObject->m_ID = m_displayList.size(); // this changes the ID of the object to the next available ID
-
+			for (int i = 0; i < m_displayList.size(); ++i)
+			{
+				if (a.m_ID == m_displayList[i].m_ID)
+				{
+					b = true;
+					break;
+				}
+				newID = std::max(newID, m_displayList[i].m_ID);
+			}
 		}
-	}
-	m_displayList.push_back(*CopyObject); // this pastes the object at this point
-	CopyObject = nullptr; // resets the copy object to null
+		if (b)
+		{
+			while (true)
+			{
+				bool idExists = false;
+				for (const auto& obj : m_displayList)
+				{
+					if (newID == obj.m_ID)
+					{
+						idExists = true;
+						break;
+					}
+				}
+				if (!idExists)
+				{
+					break;
+				}
+				newID++;
+			}
 
+			a.m_ID = newID + 1;
+		}
+
+
+		m_displayList.push_back(a);
+		CopyObject = nullptr;
+	}
 }
 
 

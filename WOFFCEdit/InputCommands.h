@@ -25,6 +25,7 @@ struct InputCommands
 	bool LMB;
 
 	bool copy;
+	bool paste; 
 	bool undo;
 	bool redo;
 	bool deleteSelected;

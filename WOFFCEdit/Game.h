@@ -64,7 +64,7 @@ public:
 	void Undo();
 	void Redo();
 	void DeleteSelected(int i);
-	void PasteObject();
+	void Paste();
 
 
 
@@ -88,7 +88,7 @@ private:
 	std::wstring texturewstr; 
 
 
-	DisplayObject* CopyObject; 
+	std::unique_ptr<DisplayObject> CopyObject; 
 
 	RECT m_ScreenDimensions; 
 
