@@ -14,6 +14,7 @@
 #include <vector>
 
 
+class ObjectEditor;
 class Camera;
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -60,11 +61,8 @@ public:
 
 
 	// ObjectManipulation
-	void Copy(int i);
-	void Undo();
-	void Redo();
-	void DeleteSelected(int i);
-	void Paste();
+
+
 
 
 
@@ -87,8 +85,6 @@ private:
 	InputCommands						m_InputCommands;
 	std::wstring texturewstr; 
 
-
-	std::unique_ptr<DisplayObject> CopyObject; 
 
 	RECT m_ScreenDimensions; 
 
@@ -113,6 +109,7 @@ private:
 	//std::unique_ptr<Camera> CurrentCamera;
 
 	std::vector<std::unique_ptr<Camera>> m_Cameras;
+	std::unique_ptr<ObjectEditor> m_ObjectEditor;
 
 	// DirectXTK objects.
 	std::unique_ptr<DirectX::CommonStates>                                  m_states;

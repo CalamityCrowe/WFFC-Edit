@@ -8,6 +8,7 @@
 #include <string>
 
 #include "Camera.h"
+#include "ObjectEditor.h"
 
 
 using namespace DirectX;
@@ -63,6 +64,8 @@ void Game::Initialize(HWND window, int width, int height)
 
 	m_width = width;
 	m_height = height;
+
+	m_ObjectEditor = std::make_unique<ObjectEditor>(); // sets up the object editor
 
 	m_deviceResources->CreateDeviceResources();
 	CreateDeviceDependentResources();
@@ -154,21 +157,10 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
 	m_Cameras[m_CurrentCamera]->HandleMovement(&m_InputCommands);
 
+	m_ObjectEditor->HandleKeyInput(&m_InputCommands, m_displayList); 
+
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
-
-	if (m_InputCommands.copy == true)
-	{
-		Copy(m_currentSelection);
-	}
-	if (m_InputCommands.deleteSelected == true)
-	{
-		DeleteSelected(m_currentSelection);
-	}
-	if (m_InputCommands.paste == true)
-	{
-		Paste();
-	}
 
 	m_batchEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
 	m_batchEffect->SetWorld(Matrix::Identity);
@@ -517,7 +509,7 @@ int Game::MousePicking()
 					if (selectedID == -1)
 					{
 						selectedID = i;
-						m_currentSelection = selectedID;
+						m_ObjectEditor->SetSelection(i); 
 
 					}
 					else
@@ -530,7 +522,7 @@ int Game::MousePicking()
 						if (newObjectDistance < CurrentObjectDistance)
 						{
 							selectedID = i;
-							m_currentSelection = selectedID;
+							m_ObjectEditor->SetSelection(i);
 						}
 
 
@@ -595,92 +587,6 @@ bool Game::CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2)
 	return (point1.x == point2.x && point1.y == point2.y && point1.z == point2.z);
 }
 
-void Game::Copy(int i)
-{
-	if (i < 0) // checks if the object is valid
-	{
-		return;
-	}
-	CopyObject = std::make_unique<DisplayObject>(m_displayList[i]); // this copies the object at this point
-}
-
-void Game::Undo()
-{
-
-}
-
-void Game::Redo()
-{
-}
-
-void Game::DeleteSelected(int i)
-{
-	if (i < 0) // checks if the object is valid
-	{
-		return;
-	}
-	m_displayList.erase(m_displayList.begin() + i); // this deletes the object at this point
-	for (int newID = i; newID < m_displayList.size(); ++newID)
-	{
-		m_displayList[newID].m_ID = newID;
-	}
-	m_currentSelection = -1; // resets this to -1 so that the object is no longer selected for any other operations
-}
-
-void Game::Paste()
-{
-	if (CopyObject == nullptr) // checks if the object is valid
-	{
-		return;
-	}
-	else
-	{
-
-		DisplayObject a = *CopyObject;
-
-		bool b = false;
-		int newID = 0;
-		if (m_displayList.size() > 0)
-		{
-			for (int i = 0; i < m_displayList.size(); ++i)
-			{
-				if (a.m_ID == m_displayList[i].m_ID)
-				{
-					b = true;
-					break;
-				}
-				newID = std::max(newID, m_displayList[i].m_ID);
-			}
-		}
-		if (b)
-		{
-			while (true)
-			{
-				bool idExists = false;
-				for (const auto& obj : m_displayList)
-				{
-					if (newID == obj.m_ID)
-					{
-						idExists = true;
-						break;
-					}
-				}
-				if (!idExists)
-				{
-					break;
-				}
-				newID++;
-			}
-
-			a.m_ID = newID + 1;
-		}
-
-
-		m_displayList.push_back(a);
-		CopyObject = nullptr;
-	}
-}
-
 
 #ifdef DXTK_AUDIO
 void Game::NewAudioDevice()
@@ -716,7 +622,6 @@ void Game::CreateDeviceDependentResources()
 
 	m_batchEffect = std::make_unique<BasicEffect>(device);
 	m_batchEffect->SetVertexColorEnabled(true);
-
 	{
 		void const* shaderByteCode;
 		size_t byteCodeLength;
