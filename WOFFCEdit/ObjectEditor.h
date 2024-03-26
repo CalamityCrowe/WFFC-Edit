@@ -1,18 +1,23 @@
 #pragma once
+#include <memory>
 #include <stack>
+#include <vector>
 
-#include "DisplayChunk.h"
+#include "DisplayObject.h"
 
 class DisplayObject;
 class InputCommands;
 
 enum CommandType
 {
-	COPY,
-	UNDO,
-	REDO,
 	DEL,
 	PASTE
+};
+
+struct ObjectData
+{
+		DisplayObject object;
+	CommandType command;
 };
 
 class ObjectEditor
@@ -20,22 +25,23 @@ class ObjectEditor
 public:
 	ObjectEditor();
 	~ObjectEditor();
-	void HandleKeyInput(InputCommands* Input,std::vector<DisplayObject>);
+	void HandleKeyInput(InputCommands* Input,std::vector<DisplayObject>&);
 	void SetSelection(int i) { selection = i; }
 
 
 private:
 
-	void Copy(int i, std::vector<DisplayObject>);
-	void undo_redo_handler(std::pair<DisplayObject, CommandType> tempUndo, std::vector<DisplayObject> displayList);
-	void Undo(std::vector<DisplayObject> displayList);
-	void Redo(std::vector<DisplayObject> displayList);
-	void Delete(int i, std::vector<DisplayObject>);
-	void Paste(std::vector<DisplayObject> displayList);
-	int selection;
 	std::unique_ptr<DisplayObject> CopyObject;
-	std::stack<std::pair<DisplayObject,CommandType>> RedoStack;
-	std::stack<std::pair<DisplayObject,CommandType>> UndoStack;
+	std::stack<ObjectData>RedoStack;
+	std::stack<ObjectData> UndoStack;
+
+	void Copy(int i, std::vector<DisplayObject>);
+	void undo_redo_handler(ObjectData &tempUndo, std::vector<DisplayObject> &displayList);
+	void Undo(std::vector<DisplayObject>& displayList);
+	void Redo(std::vector<DisplayObject>& displayList);
+	void Delete(int i, std::vector<DisplayObject>&, bool flushRedo);
+	void Paste(std::vector<DisplayObject>& displayList);
+	int selection;
 
 };
 

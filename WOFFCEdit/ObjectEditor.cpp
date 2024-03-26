@@ -1,11 +1,12 @@
 #include "ObjectEditor.h"
 
-#include "Camera.h"
-#include "DisplayObject.h"
 #include "InputCommands.h"
+#include "DisplayObject.h"
 
 ObjectEditor::ObjectEditor()
 {
+	selection = -1;
+
 }
 
 ObjectEditor::~ObjectEditor()
@@ -21,28 +22,29 @@ void ObjectEditor::Copy(int i, std::vector<DisplayObject> displayList)
 	CopyObject = std::make_unique<DisplayObject>(displayList[i]); // this copies the object at this point
 }
 
-void ObjectEditor::undo_redo_handler(std::pair<DisplayObject, CommandType> tempUndo, std::vector<DisplayObject> displayList)
+
+void ObjectEditor::undo_redo_handler(ObjectData& tempUndo, std::vector<DisplayObject>& displayList)
 {
-	switch (tempUndo.second)
+	switch (tempUndo.command)
 	{
 	case CommandType::PASTE:
-		for (int i = 0; i < displayList.size(); ++i) // loops through the display list
+
+		for (auto it = displayList.begin(); it != displayList.end(); ++it) // loops through the display list
 		{
-			if (displayList[i].m_ID == tempUndo.first.m_ID) // checks if the ID of the object is the same as the ID of the object in the display list
+			if (it->m_ID == tempUndo.object.m_ID) // checks if the ID of the object is the same as the ID of the object in the display list
 			{
-				Delete(i, displayList); // calls the delete function
+				Delete(it - displayList.begin(), displayList,); // calls the delete function
 				break; // breaks the loop
 			}
-			
 		}
 		break;
-	case CommandType::DEL:
+	case CommandType::DEL: // checks if the command type is delete
 
-		DisplayObject a = tempUndo.first; // this gets the object at this point
+		DisplayObject a = tempUndo.object; // this gets the object at this point
 		DisplayObject swap; // this creates a new object to handle the swapping
-		for(int i = 0; i < displayList.size();++i) // loops through all the objects in the list
+		for (int i = 0; i < displayList.size(); ++i) // loops through all the objects in the list
 		{
-			if(displayList[i].m_ID == a.m_ID) // checks if the ID of the object is the same as the ID of the object in the display list
+			if (displayList[i].m_ID == a.m_ID) // checks if the ID of the object is the same as the ID of the object in the display list
 			{
 				swap = displayList[i]; // this gets the object at this point
 				displayList[i] = a; // this sets the object to the object at this point
@@ -52,52 +54,58 @@ void ObjectEditor::undo_redo_handler(std::pair<DisplayObject, CommandType> tempU
 		}
 		displayList.push_back(a); // this pushes the object to the display list
 		break;
-	case CommandType::REDO:
-
-		break;
-		case CommandType::UNDO:
-
-
-			break;
-
 	}
 }
 
-void ObjectEditor::Undo(std::vector<DisplayObject> displayList)
+void ObjectEditor::Undo(std::vector<DisplayObject>& displayList)
 {
 	if (UndoStack.empty() == false) // checks if the undo stack is not empty
 	{
-		std::pair<DisplayObject, CommandType> tempUndo = UndoStack.top(); // this gets the object at the top of the undo stack
+		ObjectData tempUndo = UndoStack.top(); // this gets the object at the top of the undo stack
 		undo_redo_handler(tempUndo, displayList); // this calls the undo redo handler
 
 		UndoStack.pop(); // this pops the object from the undo stack
-		tempUndo.second = CommandType::REDO; // this sets the command type to redo
+		if (tempUndo.command == CommandType::DEL) // checks if the command type is delete
+		{
+			tempUndo.command = CommandType::PASTE; // this sets the command type to paste
+		}
+		else
+		{
+			tempUndo.command = CommandType::DEL; // this sets the command type to delete
+		}
 		RedoStack.push(tempUndo); // this pushes the object to the redo stack
 	}
 }
 
-void ObjectEditor::Redo(std::vector<DisplayObject> displayList)
+void ObjectEditor::Redo(std::vector<DisplayObject>& displayList)
 {
 	if (RedoStack.empty() == false) // checks if the redo stack is not empty
 	{
-		std::pair<DisplayObject, CommandType> tempRedo = RedoStack.top(); // this gets the object at the top of the redo stack
+		ObjectData tempRedo = RedoStack.top(); // this gets the object at the top of the redo stack
 		undo_redo_handler(tempRedo, displayList); // this calls the undo redo handler
 
 		RedoStack.pop(); // this pops the object from the redo stack
-		tempRedo.second = CommandType::UNDO; // this sets the command type to undo
+		if (tempRedo.command == CommandType::DEL) // checks if the command type is delete
+		{
+			tempRedo.command = CommandType::PASTE; // this sets the command type to paste
+		}
+		else
+		{
+			tempRedo.command = CommandType::DEL; // this sets the command type to delete
+		}
 		UndoStack.push(tempRedo); // this pushes the object to the undo stack
 	}
 }
 
-void ObjectEditor::Delete(int i, std::vector<DisplayObject> displayList)
+void ObjectEditor::Delete(int i, std::vector<DisplayObject>& displayList, bool flushRedo)
 {
 	if (i < 0) // checks if the object is valid
 	{
 		return;
 	}
-	std::pair<DisplayObject, CommandType> newPair; // this creates a new pair object
-	newPair.first = displayList[i]; // this sets the object to the object at this point
-	newPair.second = CommandType::DEL; // this sets the command type to delete
+	ObjectData newPair; // this creates a new pair object
+	newPair.object = displayList[i]; // this sets the object to the object at this point
+	newPair.command = CommandType::DEL; // this sets the command type to delete
 	UndoStack.push(newPair); // this pushes the object to the undo stack
 	displayList.erase(displayList.begin() + i); // this deletes the object at this point
 	for (int newID = i; newID < displayList.size(); ++newID) // this loops through the objects
@@ -105,15 +113,22 @@ void ObjectEditor::Delete(int i, std::vector<DisplayObject> displayList)
 		displayList[newID].m_ID = newID; // this sets the ID of the object to the new ID
 	}
 	selection = -1; // resets this to -1 so that the object is no longer selected for any other operations
+	if(flushRedo)
+	{
+		while (RedoStack.empty() == false) // checks if the redo stack is not empty
+		{
+						RedoStack.pop(); // this pops the object from the redo stack
+		}
+	}
 }
 
-void ObjectEditor::Paste(std::vector<DisplayObject> displayList)
+void ObjectEditor::Paste(std::vector<DisplayObject>& displayList)
 {
 	if (CopyObject == nullptr) // checks if the object is valid
-	{ 
+	{
 		return; // returns if the object is not valid
 	}
-	else 
+	else
 	{
 
 		DisplayObject a = *CopyObject; // this gets the object it is meant to copy from the pointer
@@ -157,15 +172,15 @@ void ObjectEditor::Paste(std::vector<DisplayObject> displayList)
 
 
 		displayList.push_back(a); // this pushes the object to the display list
-		std::pair<DisplayObject, CommandType> newPair; // this creates a new pair object
-		newPair.first = a; // this sets the object to the object at this point
-		newPair.second = CommandType::PASTE;	// this sets the command type to paste
+		ObjectData newPair; // this creates a new pair object
+		newPair.object = a; // this sets the object to the object at this point
+		newPair.command = CommandType::PASTE;	// this sets the command type to paste
 		UndoStack.push(newPair); // this pushes the object to the undo stack
 		CopyObject = nullptr; // this sets the copy object to null
 	}
 }
 
-void ObjectEditor::HandleKeyInput(InputCommands* Inputs, std::vector<DisplayObject> displayList)
+void ObjectEditor::HandleKeyInput(InputCommands* Inputs, std::vector<DisplayObject>& displayList)
 {
 	if (Inputs) // checks that the inputs are valid
 	{
