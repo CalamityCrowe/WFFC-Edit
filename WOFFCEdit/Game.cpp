@@ -157,7 +157,7 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
 	m_Cameras[m_CurrentCamera]->HandleMovement(&m_InputCommands);
 
-	m_ObjectEditor->HandleKeyInput(&m_InputCommands, m_displayList); 
+	m_ObjectEditor->HandleKeyInput(&m_InputCommands, m_displayList);
 
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
@@ -251,7 +251,7 @@ void Game::Render()
 	context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(m_states->DepthDefault(), 0);
 	context->RSSetState(m_states->CullNone());
-	//	context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
+		//context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
 
 		//Render the batch,  This is handled in the Display chunk becuase it has the potential to get complex
 	m_displayChunk.RenderBatch(m_deviceResources);
@@ -509,7 +509,7 @@ int Game::MousePicking()
 					if (selectedID == -1)
 					{
 						selectedID = i;
-						m_ObjectEditor->SetSelection(i); 
+						m_ObjectEditor->SetSelection(i);
 
 					}
 					else
@@ -549,7 +549,16 @@ int Game::MousePicking()
 					{
 						lights->SetTexture(m_displayList[i].m_texture_diffuse);
 					}
+					IEffectFog* highlightEffect = dynamic_cast<IEffectFog*>(effect);
+					if (highlightEffect)
+					{
+						highlightEffect->SetFogEnabled(true);
+						highlightEffect->SetFogStart(0.0f);
+						highlightEffect->SetFogEnd(10.0f);
+						highlightEffect->SetFogColor(Colors::Red);
+					}
 				});
+			m_displayList[i].m_wireframe = true;
 		}
 		else
 		{
@@ -560,6 +569,11 @@ int Game::MousePicking()
 					if (lights)
 					{
 						lights->SetTexture(m_displayList[i].m_texture_diffuse); // Use 'i' instead of 'selectedID'
+					}
+					IEffectFog* highlightEffect = dynamic_cast<IEffectFog*>(effect);
+					if (highlightEffect)
+					{
+						highlightEffect->SetFogEnabled(false);
 					}
 				});
 		}

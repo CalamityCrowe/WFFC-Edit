@@ -33,7 +33,7 @@ void ObjectEditor::undo_redo_handler(ObjectData& tempUndo, std::vector<DisplayOb
 		{
 			if (it->m_ID == tempUndo.object.m_ID) // checks if the ID of the object is the same as the ID of the object in the display list
 			{
-				Delete(it - displayList.begin(), displayList,); // calls the delete function
+				Delete(it - displayList.begin(), displayList); // calls the delete function
 				break; // breaks the loop
 			}
 		}
@@ -97,7 +97,7 @@ void ObjectEditor::Redo(std::vector<DisplayObject>& displayList)
 	}
 }
 
-void ObjectEditor::Delete(int i, std::vector<DisplayObject>& displayList, bool flushRedo)
+void ObjectEditor::Delete(int i, std::vector<DisplayObject>& displayList)
 {
 	if (i < 0) // checks if the object is valid
 	{
@@ -113,13 +113,6 @@ void ObjectEditor::Delete(int i, std::vector<DisplayObject>& displayList, bool f
 		displayList[newID].m_ID = newID; // this sets the ID of the object to the new ID
 	}
 	selection = -1; // resets this to -1 so that the object is no longer selected for any other operations
-	if(flushRedo)
-	{
-		while (RedoStack.empty() == false) // checks if the redo stack is not empty
-		{
-						RedoStack.pop(); // this pops the object from the redo stack
-		}
-	}
 }
 
 void ObjectEditor::Paste(std::vector<DisplayObject>& displayList)
@@ -170,6 +163,11 @@ void ObjectEditor::Paste(std::vector<DisplayObject>& displayList)
 			a.m_ID = newID + 1; // sets the ID of the object to the new ID + 1
 		}
 
+
+		while(RedoStack.empty() == false) // loops through this till the redo stack is empty
+		{
+						RedoStack.pop(); // this pops the object from the redo stack
+		}
 
 		displayList.push_back(a); // this pushes the object to the display list
 		ObjectData newPair; // this creates a new pair object

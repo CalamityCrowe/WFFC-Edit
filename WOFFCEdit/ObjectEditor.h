@@ -39,7 +39,7 @@ private:
 	void undo_redo_handler(ObjectData &tempUndo, std::vector<DisplayObject> &displayList);
 	void Undo(std::vector<DisplayObject>& displayList);
 	void Redo(std::vector<DisplayObject>& displayList);
-	void Delete(int i, std::vector<DisplayObject>&, bool flushRedo);
+	void Delete(int i, std::vector<DisplayObject>&);
 	void Paste(std::vector<DisplayObject>& displayList);
 	int selection;
 

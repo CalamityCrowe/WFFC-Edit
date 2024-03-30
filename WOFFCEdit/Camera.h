@@ -50,7 +50,7 @@ public:
 	DirectX::SimpleMath::Matrix GetView()const { return m_view; }
 	DirectX::SimpleMath::Vector3 GetPos() const { return m_camPos; }
 	DirectX::SimpleMath::Vector3 GetRight() const { return m_camRight; }
-
+	
 
 
 
