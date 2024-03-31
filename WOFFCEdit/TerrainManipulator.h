@@ -12,15 +12,17 @@ public:
 	TerrainManipulator();
 	~TerrainManipulator();
 
-	void TerrainManipulation(InputCommands* m_InputCommands, std::vector<std::unique_ptr<Camera>> m_Cameras, int m_CurrentCamera, DirectX::SimpleMath::Matrix m_world, DirectX::SimpleMath::Matrix m_projection);
-	DirectX::SimpleMath::Vector3 TerrainIntersection(InputCommands* m_InputCommands, std::vector<std::unique_ptr<Camera>> m_Cameras, int m_CurrentCamera, DirectX::SimpleMath::Matrix m_world, DirectX::SimpleMath::Matrix m_projection);
+	void TerrainManipulation(InputCommands* m_InputCommands, std::vector<std::unique_ptr<Camera>>& m_Cameras, int m_CurrentCamera, DirectX::SimpleMath::Matrix& m_world, DirectX::SimpleMath::Matrix& m_projection);
+	DirectX::SimpleMath::Vector3 TerrainIntersection(InputCommands* m_InputCommands, std::vector<std::unique_ptr<Camera>>& m_Cameras, int m_CurrentCamera, DirectX::SimpleMath::Matrix& m_world, DirectX::SimpleMath::Matrix& m_projection);
 	void SetScreenDimensions(RECT dimensions) { m_ScreenDimensions = dimensions; }
 	void SetDeviceResources(std::shared_ptr<DX::DeviceResources> deviceResources) { m_deviceResources = deviceResources; }
 
 	void HandleInput(InputCommands*);
 
+	void SetDisplayChunk(DisplayChunk& displayChunk) { m_displayChunk = &displayChunk; }
+
 private:
-	DisplayChunk& m_displayChunk;
+	DisplayChunk* m_displayChunk;
 
 	RECT m_ScreenDimensions;
 	std::shared_ptr<DX::DeviceResources>    m_deviceResources;

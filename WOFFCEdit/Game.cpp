@@ -79,7 +79,7 @@ void Game::Initialize(HWND window, int width, int height)
 
 	m_TerrainManipulator->SetScreenDimensions(m_ScreenDimensions);
 	m_TerrainManipulator->SetDeviceResources(m_deviceResources);
-	
+	m_TerrainManipulator->SetDisplayChunk(m_displayChunk);
 
 #ifdef DXTK_AUDIO
 	// Create DirectXTK for Audio objects
@@ -142,22 +142,6 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
 	//camera motion is on a plane, so kill the 7 component of the look direction
 
-	if (m_CurrentCamera != m_InputCommands.CameraSelected)
-	{
-		m_CurrentCamera = m_InputCommands.CameraSelected;
-	}
-	for (int i = 0; i < m_displayList.size(); ++i)
-	{
-		if (i == m_currentSelection)
-		{
-
-
-		}
-		else
-		{
-			m_displayList[i].m_wireframe = false;
-		}
-	}
 
 	m_Cameras[m_CurrentCamera]->Update(&m_InputCommands);
 	m_Cameras[m_CurrentCamera]->HandleMouse(&m_InputCommands);
@@ -167,14 +151,17 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
-	m_TerrainManipulator->HandleInput(&m_InputCommands); // this adjusts the variables in the terrain manipulator for doing the manipulation
 
-	
+
 	m_batchEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
 	m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
 
+	m_TerrainManipulator->HandleInput(&m_InputCommands); // this adjusts the variables in the terrain manipulator for doing the manipulation
+	m_TerrainManipulator->SetScreenDimensions(m_ScreenDimensions);
+	m_TerrainManipulator->SetDeviceResources(m_deviceResources);
+	m_TerrainManipulator->SetDisplayChunk(m_displayChunk);
 
 #ifdef DXTK_AUDIO
 	m_audioTimerAcc -= (float)timer.GetElapsedSeconds();
@@ -712,7 +699,7 @@ bool Game::CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2)
 
 void Game::HandleTerrainManipulation()
 {
-	m_TerrainManipulator->TerrainManipulation(&m_InputCommands,m_Cameras,m_currentSelection,m_world,m_projection);
+	m_TerrainManipulator->TerrainManipulation(&m_InputCommands, m_Cameras, m_CurrentCamera, m_world, m_projection);
 }
 
 

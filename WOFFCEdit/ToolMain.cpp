@@ -1,4 +1,7 @@
 #include "ToolMain.h"
+
+#include <afxwin.h>
+
 #include "resource.h"
 #include <vector>
 #include <sstream>
@@ -393,18 +396,23 @@ void ToolMain::UpdateInput(MSG* msg)
 		m_toolInputCommands.CameraSelected = 3;
 	}
 
-	if (m_keyArray['7'])
+	if (m_keyArray['8'])
 	{
 		m_toolInputCommands.manipulateTerrain = false;
 
 	}
-	if (m_keyArray['8'])
+	if (m_keyArray['9'])
 	{
 		m_toolInputCommands.manipulateTerrain = true;
 		/*	m_toolInputCommands.terrainDir = 1.0f;
 			m_d3dRenderer.TerrainManipulation();*/
 	}
-
+	m_toolInputCommands.DecreaseBrushSize = (m_keyArray['4']) ? true : false;
+	m_toolInputCommands.IncreaseBrushSize = (m_keyArray['5']) ? true : false;
+	m_toolInputCommands.DecreaseBrushStrength = (m_keyArray['6']) ? true : false;
+	m_toolInputCommands.IncreaseBrushStrength = (m_keyArray['7']) ? true : false;
+	m_toolInputCommands.IncreaseClamp = (m_keyArray['=']) ? true : false;
+	m_toolInputCommands.DecreaseClamp = (m_keyArray['-']) ? true : false;
 
 	m_toolInputCommands.arcBall = (m_keyArray['R'] ? true : false);
 	m_toolInputCommands.focus = (m_keyArray['F'] ? true : false);
