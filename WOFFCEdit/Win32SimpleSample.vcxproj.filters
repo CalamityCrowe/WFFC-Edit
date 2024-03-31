@@ -61,6 +61,7 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ObjectEditor.cpp" />
+    <ClCompile Include="TerrainManipulator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -112,6 +113,7 @@
     </ClInclude>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ObjectEditor.h" />
+    <ClInclude Include="TerrainManipulator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

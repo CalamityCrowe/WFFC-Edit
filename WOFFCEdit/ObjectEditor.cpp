@@ -33,7 +33,7 @@ void ObjectEditor::undo_redo_handler(ObjectData& tempUndo, std::vector<DisplayOb
 		{
 			if (it->m_ID == tempUndo.object.m_ID) // checks if the ID of the object is the same as the ID of the object in the display list
 			{
-				Delete(it - displayList.begin(), displayList); // calls the delete function
+				Delete(it - displayList.begin(), displayList, false); // calls the delete function
 				break; // breaks the loop
 			}
 		}
@@ -97,7 +97,7 @@ void ObjectEditor::Redo(std::vector<DisplayObject>& displayList)
 	}
 }
 
-void ObjectEditor::Delete(int i, std::vector<DisplayObject>& displayList)
+void ObjectEditor::Delete(int i, std::vector<DisplayObject>& displayList, bool flushRedo)
 {
 	if (i < 0) // checks if the object is valid
 	{
@@ -113,6 +113,15 @@ void ObjectEditor::Delete(int i, std::vector<DisplayObject>& displayList)
 		displayList[newID].m_ID = newID; // this sets the ID of the object to the new ID
 	}
 	selection = -1; // resets this to -1 so that the object is no longer selected for any other operations
+
+	if (flushRedo)
+	{
+		while (RedoStack.empty() == false) // loops through this till the redo stack is empty
+		{
+			RedoStack.pop(); // this pops the object from the redo stack
+		}
+	}
+
 }
 
 void ObjectEditor::Paste(std::vector<DisplayObject>& displayList)
@@ -164,9 +173,9 @@ void ObjectEditor::Paste(std::vector<DisplayObject>& displayList)
 		}
 
 
-		while(RedoStack.empty() == false) // loops through this till the redo stack is empty
+		while (RedoStack.empty() == false) // loops through this till the redo stack is empty
 		{
-						RedoStack.pop(); // this pops the object from the redo stack
+			RedoStack.pop(); // this pops the object from the redo stack
 		}
 
 		displayList.push_back(a); // this pushes the object to the display list
@@ -184,7 +193,14 @@ void ObjectEditor::HandleKeyInput(InputCommands* Inputs, std::vector<DisplayObje
 	{
 		if (Inputs->deleteSelected) // checks if the delete key is pressed
 		{
-			Delete(selection, displayList); // calls the delete function
+			if (RedoStack.empty() == true)
+			{
+				Delete(selection, displayList, false); // calls the delete function
+			}
+			else
+			{
+				Delete(selection, displayList, true); // calls the delete function
+			}
 		}
 		if (Inputs->copy) // checks if the copy key is pressed
 		{
@@ -193,6 +209,10 @@ void ObjectEditor::HandleKeyInput(InputCommands* Inputs, std::vector<DisplayObje
 		if (Inputs->paste) // checks if the paste key is pressed
 		{
 			Paste(displayList); // calls the paste function
+			while (RedoStack.empty() == false)
+			{
+				RedoStack.pop(); // this pops the object from the redo stack
+			}
 		}
 		if (Inputs->undo) // checks if the undo key is pressed
 		{

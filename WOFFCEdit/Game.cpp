@@ -9,7 +9,7 @@
 
 #include "Camera.h"
 #include "ObjectEditor.h"
-
+#include "TerrainManipulator.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -30,6 +30,8 @@ Game::Game()
 	//functional
 
 	//CurrentCamera = std::make_unique<Camera>();
+
+	m_TerrainManipulator = std::make_unique<TerrainManipulator>();
 
 	m_CurrentCamera = 0;
 	for (int i = 0; i < 4; ++i)
@@ -74,6 +76,10 @@ void Game::Initialize(HWND window, int width, int height)
 	CreateWindowSizeDependentResources();
 
 	GetClientRect(window, &m_ScreenDimensions);
+
+	m_TerrainManipulator->SetScreenDimensions(m_ScreenDimensions);
+	m_TerrainManipulator->SetDeviceResources(m_deviceResources);
+	
 
 #ifdef DXTK_AUDIO
 	// Create DirectXTK for Audio objects
@@ -161,7 +167,9 @@ void Game::Update(DX::StepTimer const& timer, InputCommands* Inputs)
 
 	m_Cameras[m_CurrentCamera]->CreateLookAt();
 
+	m_TerrainManipulator->HandleInput(&m_InputCommands); // this adjusts the variables in the terrain manipulator for doing the manipulation
 
+	
 	m_batchEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
 	m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_Cameras[m_CurrentCamera]->GetView());
@@ -251,9 +259,9 @@ void Game::Render()
 	context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(m_states->DepthDefault(), 0);
 	context->RSSetState(m_states->CullNone());
-		//context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
+	//context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
 
-		//Render the batch,  This is handled in the Display chunk becuase it has the potential to get complex
+	//Render the batch,  This is handled in the Display chunk becuase it has the potential to get complex
 	m_displayChunk.RenderBatch(m_deviceResources);
 
 	m_deviceResources->Present();
@@ -462,6 +470,107 @@ void Game::SaveDisplayChunk(ChunkObject* SceneChunk)
 void Game::ClearDisplayList()
 {
 }
+//
+//void Game::TerrainManipulation()
+//{
+//	Vector3 TerrainIntersectionPoint = TerrainIntersection();	//get the intersection point of the terrain
+//
+//	for (int i = 0; i < 128; ++i)
+//	{
+//		for (int j = 0; j < 128; ++j)
+//		{
+//			float distance = Vector3::Distance(Vector3(TerrainIntersectionPoint.x, 0, TerrainIntersectionPoint.z), Vector3(m_displayChunk.m_terrainGeometry[i][j].position.x, 0, m_displayChunk.m_terrainGeometry[i][j].position.z));
+//			int inRadius = 15;
+//			int outRadius = 25;
+//			if (distance < outRadius)
+//			{
+//				float moveAmount = 0.25f;
+//
+//				if (distance < inRadius)
+//				{
+//					m_displayChunk.m_terrainGeometry[i][j].position.y += moveAmount * m_InputCommands.terrainDir;
+//				}
+//				else
+//				{
+//					m_displayChunk.m_terrainGeometry[i][j].position.y += moveAmount * m_InputCommands.terrainDir * (1 - ((distance - inRadius) / 10));
+//				}
+//				//keep vertex within bounds of height map
+//				if (m_displayChunk.m_terrainGeometry[i][j].position.y < 0)
+//					m_displayChunk.m_terrainGeometry[i][j].position.y = 0;
+//				else if (m_displayChunk.m_terrainGeometry[i][j].position.y > 64)
+//					m_displayChunk.m_terrainGeometry[i][j].position.y = 64;
+//
+//			}
+//		}
+//	}
+//}
+
+//Vector3 Game::TerrainIntersection()
+//{
+//	Vector3 intLoc = Vector3::Zero;
+//	bool hasIntersected = false;
+//	//setup near and far planes of frustum with mouse X and mouse y passed down from Toolmain. 
+//	//they may look the same but note, the difference in Z
+//	const XMVECTOR nearSource = XMVectorSet(m_InputCommands.mouseX, m_InputCommands.mouseY, 0.0f, 1.0f);
+//	const XMVECTOR farSource = XMVectorSet(m_InputCommands.mouseX, m_InputCommands.mouseY, 1.0f, 1.0f);
+//
+//	XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_ScreenDimensions.right, m_ScreenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, m_Cameras[m_CurrentCamera]->GetView(), m_world);
+//	XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_ScreenDimensions.right, m_ScreenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_projection, m_Cameras[m_CurrentCamera]->GetView(), m_world);
+//
+//	XMVECTOR direction = XMVector3Normalize(farPoint - nearPoint); //get the direction of the ray
+//
+//	for (size_t i = 0; i < TERRAINRESOLUTION - 1; ++i)
+//	{
+//		if (hasIntersected)
+//		{
+//			break;
+//		}
+//		for (size_t j = 0; j < TERRAINRESOLUTION - 1; ++j)
+//		{
+//			//get the 4 corners of the quad
+//			XMVECTOR v0 = XMLoadFloat3(&m_displayChunk.m_terrainGeometry[i][j].position);
+//			XMVECTOR v1 = XMLoadFloat3(&m_displayChunk.m_terrainGeometry[i][j + 1].position);
+//			XMVECTOR v2 = XMLoadFloat3(&m_displayChunk.m_terrainGeometry[i + 1][j].position);
+//			XMVECTOR v3 = XMLoadFloat3(&m_displayChunk.m_terrainGeometry[i + 1][j + 1].position);
+//
+//			//check for intersection with the quad
+//
+//			XMVECTOR normal = XMVector3Normalize(XMVector3Cross(v1 - v0, v2 - v0));
+//			float distance = -XMVectorGetX(XMVector3Dot(normal, v0));
+//			XMVECTOR plane = XMVectorSetW(normal, distance);
+//
+//			XMVECTOR Intersect = XMPlaneIntersectLine(plane, nearPoint, farPoint); //get the intersection point
+//
+//			if (!XMVector3Equal(Intersect, XMVectorZero())) 
+//			{
+//				Vector3 intersectPoint; 
+//				XMStoreFloat3(&intersectPoint, Intersect);
+//
+//				if (intersectPoint.x >= std::min(XMVectorGetX(v0), XMVectorGetX(v1)) &&
+//					intersectPoint.x <= std::max(XMVectorGetX(v0), XMVectorGetX(v1)) &&
+//					intersectPoint.z >= std::min(XMVectorGetX(v0), XMVectorGetX(v3)) &&
+//					intersectPoint.z <= std::max(XMVectorGetX(v0), XMVectorGetX(v3)))
+//				{
+//					intLoc = intersectPoint;
+//					hasIntersected = true;
+//					break;
+//				}
+//			}
+//		}
+//	}
+//	if (hasIntersected)
+//	{
+//		m_displayChunk.CalculateTerrainNormals(); 
+//		return intLoc;
+//	}
+//	else
+//	{
+//		return Vector3(-99999, -99999, -99999);
+//	}
+//
+//
+//
+//}
 
 int Game::MousePicking()
 {
@@ -599,6 +708,11 @@ float Game::CalculateDistanceBetween(DirectX::XMFLOAT3 point1, DirectX::SimpleMa
 bool Game::CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2)
 {
 	return (point1.x == point2.x && point1.y == point2.y && point1.z == point2.z);
+}
+
+void Game::HandleTerrainManipulation()
+{
+	m_TerrainManipulator->TerrainManipulation(&m_InputCommands,m_Cameras,m_currentSelection,m_world,m_projection);
 }
 
 

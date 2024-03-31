@@ -31,4 +31,14 @@ struct InputCommands
 	bool deleteSelected;
 
 	int CameraSelected = 0;
+
+	float terrainDir; 
+	bool manipulateTerrain; 
+
+	bool IncreaseBrushSize;
+	bool DecreaseBrushSize;
+	bool IncreaseBrushStrength;
+	bool DecreaseBrushStrength;
+	bool IncreaseClamp; 
+	bool DecreaseClamp;
 };

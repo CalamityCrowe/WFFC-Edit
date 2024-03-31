@@ -289,11 +289,30 @@ void ToolMain::Tick(MSG* msg)
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
 
+	if (m_toolInputCommands.RMB)
+	{
+		if (m_toolInputCommands.manipulateTerrain) 
+		{
+			m_toolInputCommands.terrainDir = -1.0f;
+			m_d3dRenderer.HandleTerrainManipulation();
+		
+		}
+	}
+
 	//Renderer Update Call
 	if (m_toolInputCommands.LMB)
 	{
-		m_selectedObject = m_d3dRenderer.MousePicking();
-		m_toolInputCommands.LMB = false;
+		if (m_toolInputCommands.manipulateTerrain)
+		{
+			m_toolInputCommands.terrainDir = 1.0f;
+			m_d3dRenderer.HandleTerrainManipulation();
+
+		}
+		else
+		{
+			m_selectedObject = m_d3dRenderer.MousePicking();
+			m_toolInputCommands.LMB = false;
+		}
 	}
 
 	m_d3dRenderer.Tick(&m_toolInputCommands);
@@ -373,6 +392,19 @@ void ToolMain::UpdateInput(MSG* msg)
 	{
 		m_toolInputCommands.CameraSelected = 3;
 	}
+
+	if (m_keyArray['7'])
+	{
+		m_toolInputCommands.manipulateTerrain = false;
+
+	}
+	if (m_keyArray['8'])
+	{
+		m_toolInputCommands.manipulateTerrain = true;
+		/*	m_toolInputCommands.terrainDir = 1.0f;
+			m_d3dRenderer.TerrainManipulation();*/
+	}
+
 
 	m_toolInputCommands.arcBall = (m_keyArray['R'] ? true : false);
 	m_toolInputCommands.focus = (m_keyArray['F'] ? true : false);

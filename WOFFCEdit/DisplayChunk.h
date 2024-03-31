@@ -25,11 +25,12 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>   m_terrainInputLayout;
 
 
+	DirectX::VertexPositionNormalTexture m_terrainGeometry[TERRAINRESOLUTION][TERRAINRESOLUTION];
+	void CalculateTerrainNormals();
+
 private:
 
-	DirectX::VertexPositionNormalTexture m_terrainGeometry[TERRAINRESOLUTION][TERRAINRESOLUTION];
 	BYTE m_heightMap[TERRAINRESOLUTION * TERRAINRESOLUTION];
-	void CalculateTerrainNormals();
 
 	float	m_terrainHeightScale;
 	int		m_terrainSize;				//size of terrain in metres

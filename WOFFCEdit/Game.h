@@ -16,6 +16,7 @@
 
 class ObjectEditor;
 class Camera;
+class TerrainManipulator;
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
 class Game : public DX::IDeviceNotify
@@ -53,12 +54,14 @@ public:
 	void SaveDisplayChunk(ChunkObject* SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
 
+
 	int MousePicking();
 
 	static float CalculateDistanceBetween(DirectX::XMFLOAT3 point1, DirectX::SimpleMath::Vector3 point2);
 
 	bool CompareXMFloat3(DirectX::XMFLOAT3 point1, DirectX::XMFLOAT3 point2);
 
+	void HandleTerrainManipulation();
 
 	// ObjectManipulation
 
@@ -83,10 +86,10 @@ private:
 	std::vector<DisplayObject>			m_displayList;
 	DisplayChunk						m_displayChunk;
 	InputCommands						m_InputCommands;
-	std::wstring texturewstr; 
+	std::wstring texturewstr;
 
 
-	RECT m_ScreenDimensions; 
+	RECT m_ScreenDimensions;
 
 	int m_width, m_height;
 
@@ -110,6 +113,7 @@ private:
 
 	std::vector<std::unique_ptr<Camera>> m_Cameras;
 	std::unique_ptr<ObjectEditor> m_ObjectEditor;
+	std::unique_ptr<TerrainManipulator> m_TerrainManipulator;
 
 	// DirectXTK objects.
 	std::unique_ptr<DirectX::CommonStates>                                  m_states;
@@ -143,7 +147,7 @@ private:
 	DirectX::SimpleMath::Matrix                                             m_world;
 	DirectX::SimpleMath::Matrix                                             m_projection;
 
-	int m_CurrentCamera; 
+	int m_CurrentCamera;
 
 };
 

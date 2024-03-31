@@ -145,75 +145,80 @@ void Camera::HandleMouse(InputCommands* Input)
 {
 	if (Input)
 	{
-
-		newMouse = DirectX::SimpleMath::Vector2(Input->mouseX, Input->mouseY);
-
-		if (Input->RMB)
+		if (Input->manipulateTerrain == false)
 		{
-			DirectX::SimpleMath::Vector2 Difference;
 
-			Difference.x = newMouse.x - oldMouse.x;
-			Difference.y = newMouse.y - oldMouse.y;
 
-			if (Input->arcBall == false)
+
+			newMouse = DirectX::SimpleMath::Vector2(Input->mouseX, Input->mouseY);
+
+			if (Input->RMB)
 			{
-				Difference.Normalize();
+				DirectX::SimpleMath::Vector2 Difference;
 
-				if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
+				Difference.x = newMouse.x - oldMouse.x;
+				Difference.y = newMouse.y - oldMouse.y;
+
+				if (Input->arcBall == false)
 				{
-					m_camOrientation.y += m_camRotRate * Difference.x; // yaw
-					m_camOrientation.x -= m_camRotRate * Difference.y; // pitch
+					Difference.Normalize();
+
+					if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
+					{
+						m_camOrientation.y += m_camRotRate * Difference.x; // yaw
+						m_camOrientation.x -= m_camRotRate * Difference.y; // pitch
+					}
+
+					float cosR, cosP, cosY;
+					float sinR, sinP, sinY;
+
+					cosP = cosf(m_camOrientation.x * (3.1415 / 180));
+					cosY = cosf(m_camOrientation.y * (3.1415 / 180));
+					cosR = cosf(m_camOrientation.z * (3.1415 / 180));
+
+					sinP = sinf(m_camOrientation.x * (3.1415 / 180));
+					sinY = sinf(m_camOrientation.y * (3.1415 / 180));
+					sinR = sinf(m_camOrientation.z * (3.1415 / 180));
+
+					m_camLookDirection.x = sinY * cosP;
+					m_camLookDirection.y = sinP;
+					m_camLookDirection.z = cosP * -cosY;
+
+					m_camLookDirection.Cross(DirectX::SimpleMath::Vector3::UnitY, m_camRight);
+					m_camLookAt = m_camPos + m_camLookDirection;
+
 				}
-
-				float cosR, cosP, cosY;
-				float sinR, sinP, sinY;
-
-				cosP = cosf(m_camOrientation.x * (3.1415 / 180));
-				cosY = cosf(m_camOrientation.y * (3.1415 / 180));
-				cosR = cosf(m_camOrientation.z * (3.1415 / 180));
-
-				sinP = sinf(m_camOrientation.x * (3.1415 / 180));
-				sinY = sinf(m_camOrientation.y * (3.1415 / 180));
-				sinR = sinf(m_camOrientation.z * (3.1415 / 180));
-
-				m_camLookDirection.x = sinY * cosP;
-				m_camLookDirection.y = sinP;
-				m_camLookDirection.z = cosP * -cosY;
-
-				m_camLookDirection.Cross(DirectX::SimpleMath::Vector3::UnitY, m_camRight);
-				m_camLookAt = m_camPos + m_camLookDirection;
-
-			}
-			else
-			{
-				//arcball rotation
-				// This needs implemented and needs to know about the selected object
-				Difference.Normalize();
-				if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
+				else
 				{
-					m_camOrientation.y += m_camRotRate * Difference.x; // yaw
-					m_camOrientation.x -= m_camRotRate * Difference.y; // pitch
+					//arcball rotation
+					// This needs implemented and needs to know about the selected object
+					Difference.Normalize();
+					if (Difference.x != 0 || Difference.y != 0) // this will only run if the difference is not 0
+					{
+						m_camOrientation.y += m_camRotRate * Difference.x; // yaw
+						m_camOrientation.x -= m_camRotRate * Difference.y; // pitch
+					}
+
+					float orbX = orbitRadius * sin(m_camOrientation.y) * cos(m_camOrientation.x);
+					float orbY = orbitRadius * sin(m_camOrientation.x);
+					float orbZ = orbitRadius * cos(m_camOrientation.y) * cos(m_camOrientation.x);
+					m_camPos.x = ArcTarget.x + orbX;
+					m_camPos.y = ArcTarget.y + orbY;
+					m_camPos.z = ArcTarget.z + orbZ;
+
+					m_camLookDirection = ArcTarget - m_camPos;
+					m_camLookDirection.Normalize();
+
+					m_camLookDirection.Cross(DirectX::SimpleMath::Vector3::UnitY, m_camRight);
+
+					m_camLookAt = ArcTarget;
+
 				}
-
-				float orbX = orbitRadius * sin(m_camOrientation.y) * cos(m_camOrientation.x);
-				float orbY = orbitRadius * sin(m_camOrientation.x);
-				float orbZ = orbitRadius * cos(m_camOrientation.y) * cos(m_camOrientation.x);
-				m_camPos.x = ArcTarget.x + orbX;
-				m_camPos.y = ArcTarget.y + orbY;
-				m_camPos.z = ArcTarget.z + orbZ;
-
-				m_camLookDirection = ArcTarget - m_camPos;
-				m_camLookDirection.Normalize();
-
-				m_camLookDirection.Cross(DirectX::SimpleMath::Vector3::UnitY, m_camRight);
-
-				m_camLookAt = ArcTarget;
-
 			}
+
+
+			oldMouse = newMouse;
 		}
-
-
-		oldMouse = newMouse;
 	}
 
 }
