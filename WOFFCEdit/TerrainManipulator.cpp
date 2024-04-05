@@ -22,9 +22,9 @@ void TerrainManipulator::TerrainManipulation(InputCommands* m_InputCommands, std
 {
 	Vector3 TerrainIntersectionPoint = TerrainIntersection(m_InputCommands, m_Cameras, m_CurrentCamera, m_world, m_projection);	//get the intersection point of the terrain
 
-	for (int i = 0; i < TERRAINRESOLUTION; ++i) // loops through for the size of the terrain
+	for (size_t i = 0; i < TERRAINRESOLUTION; ++i) // loops through for the size of the terrain
 	{
-		for (int j = 0; j < TERRAINRESOLUTION; ++j) // loops through for the size of the terrain
+		for (size_t j = 0; j < TERRAINRESOLUTION; ++j) // loops through for the size of the terrain
 		{
 
 			float distance = Vector3::Distance(Vector3(TerrainIntersectionPoint.x, 0, TerrainIntersectionPoint.z), Vector3(m_displayChunk->m_terrainGeometry[i][j].position.x, 0, m_displayChunk->m_terrainGeometry[i][j].position.z)); // get the distance between the intersection point and the terrain point
@@ -96,7 +96,7 @@ DirectX::SimpleMath::Vector3 TerrainManipulator::TerrainIntersection(InputComman
 				XMStoreFloat3(&intersectPoint, Intersect); // store the intersect point in the vector3
 
 				if (intersectPoint.x >= std::min(XMVectorGetX(v0), XMVectorGetX(v1)) && intersectPoint.x <= std::max(XMVectorGetX(v0), XMVectorGetX(v1)) &&
-					intersectPoint.z >= std::min(XMVectorGetZ(v0), XMVectorGetZ(v3)) && intersectPoint.z <= std::max(XMVectorGetZ(v0), XMVectorGetZ(v3)))
+					intersectPoint.z >= std::min(XMVectorGetZ(v0), XMVectorGetZ(v3)) && intersectPoint.z <= std::max(XMVectorGetZ(v0), XMVectorGetZ(v3))) // check if the intersect point is within the quad
 				{
 					intLoc = intersectPoint; // set the intersect point to the intLoc 
 					hasIntersected = true; // set hasIntersected to true
@@ -117,13 +117,13 @@ DirectX::SimpleMath::Vector3 TerrainManipulator::TerrainIntersection(InputComman
 
 }
 
-void TerrainManipulator::HandleInput(InputCommands* Input )
+void TerrainManipulator::HandleInput(InputCommands* Input)
 {
 	//this is where you would handle input for the terrain manipulation tool
 	//you can add more functionality here if you wish
 
 	if (Input->DecreaseClamp) { upperClamp -= 1;  if (upperClamp < lowerClamp) { upperClamp = lowerClamp; } }
-	if (Input->IncreaseClamp) { upperClamp += 1; }
+	if (Input->IncreaseClamp) { upperClamp += 1; if (upperClamp > 64) { upperClamp = 64; } }
 	if (Input->IncreaseBrushSize) { outRadius += 0.1; inRadius += 0.1; }
 	if (Input->DecreaseBrushSize && inRadius > 0) { outRadius -= 0.1; inRadius -= 0.1; }
 	if (Input->IncreaseBrushStrength) { moveAmount += 0.01; }

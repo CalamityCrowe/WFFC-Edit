@@ -373,11 +373,15 @@ void ToolMain::UpdateInput(MSG* msg)
 	m_toolInputCommands.IncreaseOrbit = (m_keyArray['O']) ? true : false;
 	m_toolInputCommands.DecreaseOrbit = (m_keyArray['U']) ? true : false;
 
+	// handles all the input commands for the tool to do copy, paste and undo, redo
 	m_toolInputCommands.copy = (m_keyArray['C']) ? true : false;
 	m_toolInputCommands.paste = (m_keyArray['V']) ? true : false;
 	m_toolInputCommands.undo = (m_keyArray['Z']) ? true : false;
 	m_toolInputCommands.redo = (m_keyArray['Y']) ? true : false;
 	m_toolInputCommands.deleteSelected = (m_keyArray['B']) ? true : false;
+
+
+
 
 	if (m_keyArray['0'])
 	{
