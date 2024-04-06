@@ -365,6 +365,8 @@ void ToolMain::UpdateInput(MSG* msg)
 	m_toolInputCommands.back = (m_keyArray['S']) ? true : false;
 	m_toolInputCommands.left = (m_keyArray['A']) ? true : false;
 	m_toolInputCommands.right = (m_keyArray['D']) ? true : false;
+	m_toolInputCommands.Down = (m_keyArray['Q']) ? true : false;
+	m_toolInputCommands.Up = (m_keyArray['E']) ? true : false;
 	m_toolInputCommands.rotLeft = (m_keyArray['J']) ? true : false;
 	m_toolInputCommands.rotRight = (m_keyArray['L']) ? true : false;
 	m_toolInputCommands.rotUp = (m_keyArray['I']) ? true : false;

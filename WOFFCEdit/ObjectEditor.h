@@ -16,7 +16,7 @@ enum CommandType
 
 struct ObjectData
 {
-		DisplayObject object;
+	DisplayObject object;
 	CommandType command;
 };
 
@@ -25,7 +25,7 @@ class ObjectEditor
 public:
 	ObjectEditor();
 	~ObjectEditor();
-	void HandleKeyInput(InputCommands* Input,std::vector<DisplayObject>&);
+	void HandleKeyInput(InputCommands* Input, std::vector<DisplayObject>&);
 	void SetSelection(int i) { selection = i; }
 
 
@@ -36,7 +36,7 @@ private:
 	std::stack<ObjectData> UndoStack;
 
 	void Copy(int i, std::vector<DisplayObject>);
-	void undo_redo_handler(ObjectData &tempUndo, std::vector<DisplayObject> &displayList);
+	void undo_redo_handler(ObjectData& tempUndo, std::vector<DisplayObject>& displayList);
 	void Undo(std::vector<DisplayObject>& displayList);
 	void Redo(std::vector<DisplayObject>& displayList);
 	void Delete(int i, std::vector<DisplayObject>&, bool flushRedo);

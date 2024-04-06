@@ -6,6 +6,8 @@ struct InputCommands
 	bool back;
 	bool right;
 	bool left;
+	bool Up;
+	bool Down;
 	bool rotRight;
 	bool rotLeft;
 	bool rotUp;
