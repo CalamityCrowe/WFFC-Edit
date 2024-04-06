@@ -122,11 +122,11 @@ void TerrainManipulator::HandleInput(InputCommands* Input)
 	//this is where you would handle input for the terrain manipulation tool
 	//you can add more functionality here if you wish
 
-	if (Input->DecreaseClamp) { upperClamp -= 1;  if (upperClamp < lowerClamp) { upperClamp = lowerClamp; } }
-	if (Input->IncreaseClamp) { upperClamp += 1; if (upperClamp > 64) { upperClamp = 64; } }
-	if (Input->IncreaseBrushSize) { outRadius += 0.1; inRadius += 0.1; }
-	if (Input->DecreaseBrushSize && inRadius > 0) { outRadius -= 0.1; inRadius -= 0.1; }
-	if (Input->IncreaseBrushStrength) { moveAmount += 0.01; }
-	if (Input->DecreaseBrushStrength && moveAmount > 0) { moveAmount -= 0.01; }
+	if (Input->DecreaseClamp) { upperClamp -= 1;  if (upperClamp < lowerClamp) { upperClamp = lowerClamp; } } // if the decrease clamp is pressed decrease the upper clamp by 1
+	if (Input->IncreaseClamp) { upperClamp += 1; if (upperClamp > 64) { upperClamp = 64; } } // if the increase clamp is pressed increase the upper clamp by 1
+	if (Input->IncreaseBrushSize) { outRadius += 0.1; inRadius += 0.1; } // if the increase brush size is pressed increase the out and in radius by 0.1
+	if (Input->DecreaseBrushSize && inRadius > 0) { outRadius -= 0.1; inRadius -= 0.1; } // if the decrease brush size is pressed decrease the out and in radius by 0.1
+	if (Input->IncreaseBrushStrength) { moveAmount += 0.01; } // if the increase brush strength is pressed increase the move amount by 0.01
+	if (Input->DecreaseBrushStrength && moveAmount > 0) { moveAmount -= 0.01; } // if the decrease brush strength is pressed decrease the move amount by 0.01
 
 }

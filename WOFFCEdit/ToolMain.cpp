@@ -336,7 +336,7 @@ void ToolMain::UpdateInput(MSG* msg)
 		break;
 
 	case WM_MOUSEMOVE:
-		m_toolInputCommands.mouseX = GET_X_LPARAM(msg->lParam);
+		m_toolInputCommands.mouseX = GET_X_LPARAM(msg->lParam); //GET_X_LPARAM and GET_Y_LPARAM are macros that extract the x and y from the LPARAM
 		m_toolInputCommands.mouseY = GET_Y_LPARAM(msg->lParam);
 		break;
 
@@ -359,7 +359,7 @@ void ToolMain::UpdateInput(MSG* msg)
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
 	//WASD movement
 
-	//rotation
+	//rotation and movement for the camera
 
 	m_toolInputCommands.forward = (m_keyArray['W']) ? true : false;
 	m_toolInputCommands.back = (m_keyArray['S']) ? true : false;
@@ -384,8 +384,8 @@ void ToolMain::UpdateInput(MSG* msg)
 
 
 
-
-	if (m_keyArray['0'])
+	// handles the switching between cameras
+	if (m_keyArray['0']) 
 	{
 		m_toolInputCommands.CameraSelected = 0;
 	}
@@ -413,6 +413,7 @@ void ToolMain::UpdateInput(MSG* msg)
 		/*	m_toolInputCommands.terrainDir = 1.0f;
 			m_d3dRenderer.TerrainManipulation();*/
 	}
+	// this handles the brush size, strength and clamping for the terrain manipulation
 	m_toolInputCommands.DecreaseBrushSize = (m_keyArray['4']) ? true : false;
 	m_toolInputCommands.IncreaseBrushSize = (m_keyArray['5']) ? true : false;
 	m_toolInputCommands.DecreaseBrushStrength = (m_keyArray['6']) ? true : false;
@@ -420,6 +421,8 @@ void ToolMain::UpdateInput(MSG* msg)
 	m_toolInputCommands.IncreaseClamp = (m_keyArray['=']) ? true : false;
 	m_toolInputCommands.DecreaseClamp = (m_keyArray['-']) ? true : false;
 
+
+	// this handles the camera focus and arcball rotation
 	m_toolInputCommands.arcBall = (m_keyArray['R'] ? true : false);
 	m_toolInputCommands.focus = (m_keyArray['F'] ? true : false);
 }

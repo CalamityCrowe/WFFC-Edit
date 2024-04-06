@@ -1,9 +1,7 @@
 
-
 #include "Camera.h"
 
 #include "InputCommands.h"
-
 
 Camera::Camera()
 {
